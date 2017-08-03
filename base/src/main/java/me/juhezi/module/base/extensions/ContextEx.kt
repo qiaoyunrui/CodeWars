@@ -3,6 +3,8 @@ package me.juhezi.module.base.extensions
 import android.content.Context
 import android.util.DisplayMetrics
 import android.view.WindowManager
+import android.widget.Toast
+import me.juhezi.module.base.R
 
 /**
  * Context 的扩展方法
@@ -33,4 +35,12 @@ private fun Context.getScreenMetrics(): DisplayMetrics {
 fun Context.getScreenHeight() = getScreenMetrics().heightPixels
 
 fun Context.getScreenWidth() = getScreenMetrics().widthPixels
+
+fun Context.toast(message: String = getString(R.string.app_name)) {
+    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.longToast(message: String = getString(R.string.app_name)) {
+    Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
 
