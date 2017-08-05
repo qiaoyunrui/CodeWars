@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Base application theme. -->
+    <style name="BaseAppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme" parent="BaseAppTheme">
+        <item name="android:windowBackground">@color/window_bg_color</item>
+        <item name="android:windowAnimationStyle">@style/translate_activity_in_out</item>
+    </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="translate_activity_in_out">
+        <item name="android:activityOpenEnterAnimation">@anim/activity_open_enter_from_right</item>
+        <item name="android:activityOpenExitAnimation">@anim/activity_open_enter_to_left</item>
+        <item name="android:activityCloseEnterAnimation">@anim/activity_close_enter_to_right</item>
+        <item name="android:activityCloseExitAnimation">@anim/activity_close_to_right</item>
+    </style>
+</resources>
