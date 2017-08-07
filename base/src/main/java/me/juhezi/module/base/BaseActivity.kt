@@ -36,10 +36,10 @@ open class BaseActivity : AppCompatActivity() {
     private val mLayoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT)
 
-    @LayoutRes private var mEmptyViewResId = android.R.layout.activity_list_item
-    @LayoutRes private var mErrorViewResId = android.R.layout.activity_list_item
-    @LayoutRes private var mLoadingViewResId = android.R.layout.activity_list_item
-    @LayoutRes private var mNoNetworkViewResId = android.R.layout.activity_list_item
+    @LayoutRes private var mEmptyViewResId = R.layout.view_empty_default
+    @LayoutRes private var mErrorViewResId = R.layout.view_error_default
+    @LayoutRes private var mLoadingViewResId = R.layout.view_loading_default
+    @LayoutRes private var mNoNetworkViewResId = R.layout.view_no_network_default
     @LayoutRes private var mRootViewResId = R.layout.activity_base
 
     private var mRootView: View? = null
