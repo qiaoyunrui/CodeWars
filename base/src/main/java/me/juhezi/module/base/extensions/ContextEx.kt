@@ -1,10 +1,13 @@
 package me.juhezi.module.base.extensions
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.os.Environment
 import android.util.DisplayMetrics
 import android.view.WindowManager
 import android.widget.Toast
 import me.juhezi.module.base.R
+import java.io.File
 
 /**
  * Context 的扩展方法
@@ -42,5 +45,32 @@ fun Context.toast(message: String = getString(R.string.app_name)) {
 
 fun Context.longToast(message: String = getString(R.string.app_name)) {
     Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+}
+
+/**
+ * 获取缓存地址
+ * 如果 SD 卡存在或者 SD 卡不可被移除的时候，获取到的是：/sdcard/Android/data/<application package>/cache
+ * 否则，获取到的是：/data/data/<application package>/cache
+ */
+fun Context.getDiskCacheDir(uniqueName: String = "common"): File {
+    val cachePath = if (Environment.MEDIA_MOUNTED == Environment.getExternalStorageState() ||
+            !Environment.isExternalStorageRemovable())
+        externalCacheDir.path
+    else
+        cacheDir.path
+    return File("$cachePath${File.separator}$uniqueName")
+}
+
+/**
+ * 获取应用程序版本号
+ */
+fun Context.getAppVersion(): Int {
+    try {
+        val info = packageManager.getPackageInfo(packageName, 0)
+        return info.versionCode
+    } catch (e: PackageManager.NameNotFoundException) {
+        e.printStackTrace()
+    }
+    return 1
 }
 
