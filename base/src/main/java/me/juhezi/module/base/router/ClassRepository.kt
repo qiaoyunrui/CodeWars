@@ -8,13 +8,14 @@ import android.support.v4.util.ArrayMap
 /**
  * Created by Juhezi[juhezix@163.com] on 2017/8/8.
  */
-class ClazzRepository : IRepository<Class<*>> {
+open class ClassRepository<T> : IRepository<Class<out T>> {
 
-    private val mMap = ArrayMap<String, Class<*>>()
+
+    private val mMap = ArrayMap<String, Class<out T>>()
 
     override fun get(key: String) = mMap[key]
 
-    override fun put(key: String, value: Class<*>) {
+    override fun put(key: String, value: Class<out T>) {
         mMap.put(key, value)
     }
 

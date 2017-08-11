@@ -26,6 +26,6 @@ android:
 script:
     - echo "Travis branch is $TRAVIS_BRANCH"
 
-notifications:
-    email:
-      - juhezi_auto@163.com
+#notifications:
+#    email:
+#      - juhezi_auto@163.com

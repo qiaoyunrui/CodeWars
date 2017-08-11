@@ -71,9 +71,9 @@ open class BaseActivity : AppCompatActivity() {
         mContainer?.addView(mContentView, 0, mLayoutParams)
     }
 
-    protected fun installViews() {}
+    open protected fun installViews() {}
 
-    protected fun onRefresh() {}
+    open protected fun onRefresh() {}
 
     protected fun showContentView() {
         mStatus = STATUS_CONTENT
@@ -82,25 +82,40 @@ open class BaseActivity : AppCompatActivity() {
 
     protected fun showLoading(layoutResID: Int = mLoadingViewResId, action: ((View?) -> Unit)? = null) {
         mStatus = STATUS_LOADING
-        //Load View
+        if (null == mLoadingView) {
+            mLoadingView = mInflater?.inflate(layoutResID, null)
+            mContainer?.addView(mLoadingView, 0, mLayoutParams)
+        }
         action?.invoke(mLoadingView)
         showView(mStatus)
     }
 
     protected fun showError(layoutResID: Int = mErrorViewResId, action: ((View?) -> Unit)? = null) {
         mStatus = STATUS_ERROR
+        if (null == mErrorView) {
+            mErrorView = mInflater?.inflate(layoutResID, null)
+            mContainer?.addView(mErrorView, 0, mLayoutParams)
+        }
         action?.invoke(mErrorView)
         showView(mStatus)
     }
 
     protected fun showNoNetWork(layoutResID: Int = mNoNetworkViewResId, action: ((View?) -> Unit)? = null) {
         mStatus = STATUS_NO_NETWORK
+        if (null == mNoNetworkView) {
+            mNoNetworkView = mInflater?.inflate(layoutResID, null)
+            mContainer?.addView(mNoNetworkView, 0, mLayoutParams)
+        }
         action?.invoke(mNoNetworkView)
         showView(mStatus)
     }
 
     protected fun showEmpty(layoutResID: Int = mEmptyViewResId, action: ((View?) -> Unit)? = null) {
         mStatus = STATUS_EMPTY
+        if (null == mEmptyView) {
+            mEmptyView = mInflater?.inflate(layoutResID, null)
+            mContainer?.addView(mEmptyView, 0, mLayoutParams)
+        }
         action?.invoke(mEmptyView)
         showView(mStatus)
     }
