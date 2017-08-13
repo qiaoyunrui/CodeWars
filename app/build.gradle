@@ -2,6 +2,22 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 def mApplicationId = "me.juhezi.codewars"
+def mBateApplicationId = "me.juhezi.bate.codewars"
+
+def app_name_release = "CodeWars"
+def debug_suffix = "debug"
+
+static def currentSecond() {
+    return new Date().format("ss", TimeZone.getTimeZone("GMT+8"))
+}
+
+/**
+ * 获取当前时间，精确到天
+ * @return
+ */
+static def currentTime() {
+    return new Date().format("yyyy_MM_dd", TimeZone.getTimeZone("GMT+8"))
+}
 
 android {
     compileSdkVersion rootProject.ext.androidCompileSdkVersion
@@ -15,16 +31,44 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 //        multiDexEnabled true
     }
+
     buildTypes {
         release {
             minifyEnabled true
             shrinkResources true
             zipAlignEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue("string", "app_name", app_name_release)
+            applicationVariants.all { variant ->
+                if (variant.buildType.name == 'release') {
+                    variant.outputs.each { output ->
+                        def outputFile = output.outputFile
+                        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                            def fileName = "${app_name_release}_v${defaultConfig.versionName}_${currentTime()}_${variant.flavorName}.apk"
+                            output.outputFile = new File(outputFile.parent, fileName)
+                        }
+                    }
+                }
+            }
         }
+
         debug {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue("string", "app_name", "${app_name_release}_${debug_suffix}_${currentSecond()}")
+        }
+    }
+
+    productFlavors {
+        codewars {
+            applicationId mApplicationId
+            versionCode VERSION_CODE as int
+            versionName VERSION_NAME
+        }
+        codewars_bate {
+            applicationId mBateApplicationId
+            versionCode VERSION_CODE as int
+            versionName VERSION_NAME
         }
     }
 }
@@ -48,6 +92,7 @@ dependencies {
     //module
     compile project(':base')
 }
+
 repositories {
     mavenCentral()
 }
