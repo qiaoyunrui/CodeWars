@@ -63,7 +63,7 @@ public class RegisterProcessor extends AbstractProcessor {
         return false;
     }
 
-    boolean checkAnnotationUseValid(Element element) {
+    private boolean checkAnnotationUseValid(Element element) {
         return element instanceof TypeElement;  //只接受类
     }
 
