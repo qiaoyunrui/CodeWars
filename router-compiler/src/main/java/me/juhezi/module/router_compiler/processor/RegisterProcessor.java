@@ -37,11 +37,6 @@ public class RegisterProcessor extends AbstractProcessor {
         mMessager = processingEnvironment.getMessager();
     }
 
-    /**
-     * 返回支持的注解类型
-     *
-     * @return
-     */
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> annotationTypes = new LinkedHashSet<>();
@@ -49,25 +44,11 @@ public class RegisterProcessor extends AbstractProcessor {
         return annotationTypes;
     }
 
-    /**
-     * 返回支持的源码版本
-     *
-     * @return
-     */
     @Override
     public SourceVersion getSupportedSourceVersion() {
         return SourceVersion.latestSupported();
     }
 
-    /**
-     * 核心部位
-     * - 收集信息
-     * - 生成代理类
-     *
-     * @param set
-     * @param roundEnvironment
-     * @return
-     */
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         Set<? extends Element> elements = roundEnvironment

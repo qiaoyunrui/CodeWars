@@ -32,7 +32,7 @@ dependencies {
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
     // Module
-    compile project(':router-compiler')
+    annotationProcessor project(':router-compiler')
     // ButterKnife
     compile "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
 }
