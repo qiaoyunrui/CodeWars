@@ -10,9 +10,6 @@ import me.juhezi.module.base.view.activity.DefaultActivity
  * Created by Juhezi[juhezix@163.com] on 2017/8/12.
  */
 class ActivityClassRepository : ClassRepository<Activity>() {
-    override fun putAny(key: String, value: Any) {
-
-    }
 
     companion object {
         private val DEFAULT_ACTIVITY_CLASS = DefaultActivity::class.java

@@ -1,19 +1,22 @@
-apply plugin: 'com.android.library'
+apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
-def mVersionCode = 1
-def mVersionName = "1.0"
+def mApplicationId = "me.juhezi.codewars.test"
 
 android {
     compileSdkVersion rootProject.ext.androidCompileSdkVersion
     buildToolsVersion rootProject.ext.androidBuildToolsVersion
 
+
     defaultConfig {
+        applicationId mApplicationId
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode mVersionCode
-        versionName mVersionName
+        versionCode VERSION_CODE as int
+        versionName VERSION_NAME
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         release {
@@ -24,18 +27,10 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    testCompile 'junit:junit:4.12'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:0.5'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2'
+
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
-    // Module
-    compile project(':router-compiler')
-    // ButterKnife
-    compile "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
-}
-repositories {
-    mavenCentral()
 }

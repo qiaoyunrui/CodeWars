@@ -25,7 +25,7 @@ class Repository {
                 Pair(SERVICE, ServiceClassRepository()),
                 Pair(WEB, WebRepository())))
 
-        fun <T : Any> register(type: Int, key: String, value: T) {
+        fun register(type: Int, key: String) {
             val repository = map[type] ?: return
         }
 
