@@ -10,7 +10,6 @@ import android.support.v4.util.ArrayMap
  */
 open class ClassRepository<T> : IRepository<Class<out T>> {
 
-
     private val mMap = ArrayMap<String, Class<out T>>()
 
     override fun get(key: String) = mMap[key]
