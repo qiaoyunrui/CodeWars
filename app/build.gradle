@@ -7,6 +7,8 @@ def mBateApplicationId = "me.juhezi.bate.codewars"
 def app_name_release = "CodeWars"
 def debug_suffix = "debug"
 
+def mCommonFlavorDimension = "common"
+
 static def currentSecond() {
     return new Date().format("ss", TimeZone.getTimeZone("GMT+8"))
 }
@@ -29,6 +31,7 @@ android {
         versionCode VERSION_CODE as int
         versionName VERSION_NAME
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
 //        multiDexEnabled true
     }
 
@@ -41,11 +44,10 @@ android {
             resValue("string", "app_name", app_name_release)
             applicationVariants.all { variant ->
                 if (variant.buildType.name == 'release') {
-                    variant.outputs.each { output ->
-                        def outputFile = output.outputFile
-                        if (outputFile != null && outputFile.name.endsWith('.apk')) {
+                    variant.outputs.all {
+                        if (outputFileName != null && outputFileName.endsWith('.apk')) {
                             def fileName = "${app_name_release}_v${defaultConfig.versionName}_${currentTime()}_${variant.flavorName}.apk"
-                            output.outputFile = new File(outputFile.parent, fileName)
+                            outputFileName = fileName
                         }
                     }
                 }
@@ -59,13 +61,17 @@ android {
         }
     }
 
+    flavorDimensions mCommonFlavorDimension
+
     productFlavors {
         codewars {
+            dimension mCommonFlavorDimension
             applicationId mApplicationId
             versionCode VERSION_CODE as int
             versionName VERSION_NAME
         }
         codewars_bate {
+            dimension mCommonFlavorDimension
             applicationId mBateApplicationId
             versionCode VERSION_CODE as int
             versionName VERSION_NAME
