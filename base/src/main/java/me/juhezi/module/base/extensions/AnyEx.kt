@@ -1,5 +1,6 @@
 package me.juhezi.module.base.extensions
 
+import android.text.TextUtils
 import android.util.Log
 
 /**
@@ -15,3 +16,4 @@ fun Any.v(message: String) = Log.v(javaClass.simpleName, message)
 
 fun Any.d(message: String) = Log.d(javaClass.simpleName, message)
 
+fun Any.isEmpty(content: String?) = TextUtils.isEmpty(content)

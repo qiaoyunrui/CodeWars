@@ -64,7 +64,9 @@ open class BaseActivity : AppCompatActivity() {
         mRootView = findViewById(R.id.vg_base_activity_root)
         mContainer = findViewById(R.id.vg_base_activity_container) as FrameLayout?
         mToolbar = findViewById(R.id.tb_base_activity) as Toolbar?
-        setSupportActionBar(mToolbar)
+        if (supportActionBar == null) {
+            setSupportActionBar(mToolbar)
+        }
     }
 
     override fun setContentView(layoutResID: Int) {
