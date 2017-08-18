@@ -18,6 +18,8 @@ import android.util.Log;
 
 
 /**
+ * 只能居中显示
+ * 不要设置 gravity 属性
  * Created by Juhezi[juhezix@163.com] on 2017/8/18.
  */
 
