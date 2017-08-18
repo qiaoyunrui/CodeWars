@@ -71,7 +71,6 @@ public class GradientTextView extends android.support.v7.widget.AppCompatTextVie
         if (mShader != null) {
             mPaint.setShader(mShader);
         }
-        Log.i(TAG, "onDraw: " + mShader);
         canvas.drawText(mContent, getMeasuredWidth() / 2 - mRect.width() / 2,
                 getMeasuredHeight() / 2 + mRect.height() / 2, mPaint);
     }
@@ -136,6 +135,7 @@ public class GradientTextView extends android.support.v7.widget.AppCompatTextVie
         mEndColor = endColor;
         mOrientation = orientation;
         isDirty = true;
+        mDrawable = null;   //否则会被覆盖
         invalidate();
     }
 
