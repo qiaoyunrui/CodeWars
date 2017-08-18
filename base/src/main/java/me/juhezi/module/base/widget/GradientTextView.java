@@ -46,7 +46,7 @@ public class GradientTextView extends android.support.v7.widget.AppCompatTextVie
     }
 
     public GradientTextView(Context context, AttributeSet attrs) {
-        this(context, attrs, -1);
+        this(context, attrs, 0);
     }
 
     public GradientTextView(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -73,8 +73,7 @@ public class GradientTextView extends android.support.v7.widget.AppCompatTextVie
         if (mShader != null) {
             mPaint.setShader(mShader);
         }
-        canvas.drawText(mContent, getMeasuredWidth() / 2 - mRect.width() / 2,
-                getMeasuredHeight() / 2 + mRect.height() / 2, mPaint);
+        super.onDraw(canvas);
     }
 
     public void setShader(Shader shader) {
