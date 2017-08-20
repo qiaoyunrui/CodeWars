@@ -2,7 +2,6 @@ package me.juhezi.module.base.widget;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.RadialGradient;
@@ -14,7 +13,6 @@ import android.os.Build;
 import android.support.annotation.ColorInt;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
-import android.util.Log;
 
 
 /**
@@ -31,6 +29,7 @@ public class GradientTextView extends android.support.v7.widget.AppCompatTextVie
     private Rect mRect = new Rect();
     private Paint mPaint;
     private String mContent;
+    private Action<Paint> mAction;
     private GradientDrawable mDrawable;
     @ColorInt
     private int mStartColor;
@@ -72,6 +71,9 @@ public class GradientTextView extends android.support.v7.widget.AppCompatTextVie
         }
         if (mShader != null) {
             mPaint.setShader(mShader);
+        }
+        if (mAction != null) {
+            mAction.onAction(mPaint);
         }
         super.onDraw(canvas);
     }
@@ -144,10 +146,18 @@ public class GradientTextView extends android.support.v7.widget.AppCompatTextVie
         return mShader;
     }
 
+    public void setAction(Action<Paint> action) {
+        mAction = action;
+    }
+
     private LinearGradient createLinearGradient(@ColorInt int startColor, @ColorInt int endColor, GradientDrawable.Orientation orientation) {
         Rect rect = getRectByOrientation(orientation);
         return new LinearGradient(rect.left, rect.top, rect.right, rect.bottom,
                 new int[]{startColor, endColor}, null, Shader.TileMode.CLAMP);
+    }
+
+    public interface Action<T> {
+        void onAction(T t);
     }
 
 }
