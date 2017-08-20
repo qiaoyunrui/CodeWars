@@ -1,18 +1,13 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-
 def mApplicationId = "me.juhezi.codewars"
 def mBateApplicationId = "me.juhezi.bate.codewars"
-
 def app_name_release = "CodeWars"
 def debug_suffix = "debug"
-
 def mCommonFlavorDimension = "common"
-
 static def currentSecond() {
     return new Date().format("ss", TimeZone.getTimeZone("GMT+8"))
 }
-
 /**
  * 获取当前时间，精确到天
  * @return
@@ -20,8 +15,15 @@ static def currentSecond() {
 static def currentTime() {
     return new Date().format("yyyy_MM_dd", TimeZone.getTimeZone("GMT+8"))
 }
-
 android {
+    signingConfigs {
+        releaseConfig {
+            storeFile file('../keys/codewars_juhezi.jks')
+            storePassword project.hasProperty("KEYSTORE_PASS") ? KEYSTORE_PASS : System.getenv("KEYSTORE_PASS")
+            keyAlias project.hasProperty("ALIAS_NAME") ? ALIAS_NAME : System.getenv("ALIAS_NAME")
+            keyPassword project.hasProperty("ALIAS_PASS") ? ALIAS_PASS : System.getenv("ALIAS_PASS")
+        }
+    }
     compileSdkVersion rootProject.ext.androidCompileSdkVersion
     buildToolsVersion rootProject.ext.androidBuildToolsVersion
     defaultConfig {
@@ -39,7 +41,6 @@ android {
             }
         }
     }
-
     buildTypes {
         release {
             minifyEnabled true
@@ -67,12 +68,13 @@ android {
                     }
                 }
             }
+            signingConfig signingConfigs.releaseConfig
+        }
 
-            debug {
-                minifyEnabled true
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-                resValue("string", "app_name", "${app_name_release}_${debug_suffix}_${currentSecond()}")
-            }
+        debug {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            resValue("string", "app_name", "${app_name_release}_${debug_suffix}_${currentSecond()}")
         }
 
         flavorDimensions mCommonFlavorDimension
@@ -92,7 +94,6 @@ android {
             }
         }
     }
-
     dependencies {
         compile fileTree(include: ['*.jar'], dir: 'libs')
         androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -112,8 +113,9 @@ android {
         //module
         compile project(':base')
     }
-
     repositories {
         mavenCentral()
     }
+}
+dependencies {
 }
