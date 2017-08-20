@@ -8,9 +8,10 @@ android:
   - extra-android-m2repository
   - sys-img-armeabi-v7a-android-25
   - sys-img-armeabi-v7a-android-20
+sudo: false
 script:
 - echo "Travis branch is $TRAVIS_BRANCH"
-- ./gradlew assembleRelease
+- "./gradlew assembleRelease"
 before_install:
 - openssl aes-256-cbc -K $encrypted_9e84b7d4abd2_key -iv $encrypted_9e84b7d4abd2_iv
   -in codewars_juhezi.jks.enc -out keys/codewars_juhezi.jks -d
