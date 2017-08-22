@@ -64,6 +64,7 @@ public class RegisterProcessor extends AbstractProcessor {
             TypeElement typeElement = (TypeElement) element;
             String className = typeElement.getQualifiedName().toString();   //获得类名
             //对类名进行判断，是否属于 Activity
+            System.out.println(className);
             proxyInfo.add(className);
             try {
                 JavaFileObject sourceFile = mFileUtils.createSourceFile("com.example.juhezi.test.Proxy",element);
