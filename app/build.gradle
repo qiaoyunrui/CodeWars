@@ -94,28 +94,26 @@ android {
             }
         }
     }
-    dependencies {
-        compile fileTree(include: ['*.jar'], dir: 'libs')
-        androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-            exclude group: 'com.android.support', module: 'support-annotations'
-        })
-        compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
-        compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
-        compile "com.android.support:support-v4:$rootProject.ext.supportLibVersion"
-        compile "com.android.support:support-annotations:$rootProject.ext.supportLibVersion"
-        compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
-        compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibVersion"
-        compile "com.android.support:cardview-v7:$rootProject.ext.supportLibVersion"
-        compile "com.android.support:design:$rootProject.ext.supportLibVersion"
-        // compile "com.android.support:multidex:$rootProject.ext.multidexVersion"
-        testCompile "junit:junit:$rootProject.ext.junitVersion"
-
-        //module
-        compile project(':base')
-    }
     repositories {
         mavenCentral()
     }
 }
 dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
+    compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
+    compile "com.android.support:support-v4:$rootProject.ext.supportLibVersion"
+    compile "com.android.support:support-annotations:$rootProject.ext.supportLibVersion"
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
+    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibVersion"
+    compile "com.android.support:cardview-v7:$rootProject.ext.supportLibVersion"
+    compile "com.android.support:design:$rootProject.ext.supportLibVersion"
+    // compile "com.android.support:multidex:$rootProject.ext.multidexVersion"
+    testCompile "junit:junit:$rootProject.ext.junitVersion"
+
+    //module
+    compile project(':base')
 }
