@@ -22,6 +22,8 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.tools.JavaFileObject;
 
+import me.juhezi.module.router_compiler.extensions.MessagerExKt;
+
 /**
  * Created by Juhezi on 2017/8/17.
  */
@@ -31,7 +33,6 @@ public class RegisterProcessor extends AbstractProcessor {
     private Filer mFileUtils;
     private Elements mElementUtils;
     private Messager mMessager;
-    private ProxyInfo proxyInfo = new ProxyInfo();
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
@@ -57,24 +58,11 @@ public class RegisterProcessor extends AbstractProcessor {
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
         Set<? extends Element> elements = roundEnvironment
                 .getElementsAnnotatedWith(Register.class);
-        proxyInfo.clear();
-        // 1.收集信息
         for (Element element : elements) {
             if (!checkAnnotationUseValid(element)) return false;
             TypeElement typeElement = (TypeElement) element;
             String className = typeElement.getQualifiedName().toString();   //获得类名
-            //对类名进行判断，是否属于 Activity
-            System.out.println(className);
-            proxyInfo.add(className);
-            try {
-                JavaFileObject sourceFile = mFileUtils.createSourceFile("com.example.juhezi.test.Proxy",element);
-                Writer writer = sourceFile.openWriter();
-                writer.write(proxyInfo.generateJavaCode());
-                writer.flush();
-                writer.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            MessagerExKt.print(mMessager, className);
         }
         return true;
     }

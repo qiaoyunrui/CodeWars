@@ -1,13 +1,27 @@
 //preview->>
 //apply plugin: 'java-library'
 apply plugin: 'java'
+apply plugin: 'kotlin'
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':router-annotation')
     // AutoService
     compile "com.google.auto.service:auto-service:$rootProject.ext.autoServiceVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 }
 
 sourceCompatibility = "1.7"
 targetCompatibility = "1.7"
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+    }
+}
+repositories {
+    mavenCentral()
+}

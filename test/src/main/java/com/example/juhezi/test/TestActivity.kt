@@ -16,7 +16,7 @@ import me.juhezi.module.base.widget.GradientTextView
  * Test
  * Created by Juhezi on 2017/8/17.
  */
-@Register class TestActivity : BaseActivity() {
+class TestActivity : BaseActivity() {
     @RequiresApi(Build.VERSION_CODES.N)
     override fun installViews() {
         setContentView(R.layout.layout_test)
