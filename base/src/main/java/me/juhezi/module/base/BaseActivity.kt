@@ -50,8 +50,6 @@ open class BaseActivity : AppCompatActivity() {
 
     private var mInflater: LayoutInflater? = null
 
-    private var mUnBinder: Unbinder? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mInflater = LayoutInflater.from(this)
@@ -141,7 +139,6 @@ open class BaseActivity : AppCompatActivity() {
         mErrorView = null
         mLoadingView = null
         mNoNetworkView = null
-        mUnBinder?.unbind()
     }
 
 }
