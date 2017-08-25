@@ -12,3 +12,6 @@ sudo: false
 script:
 - echo "Travis branch is $TRAVIS_BRANCH"
 - "./gradlew assembleRelease"
+before_install:
+- openssl aes-256-cbc -K $encrypted_54c28a617310_key -iv $encrypted_54c28a617310_iv
+  -in codewars_juhezi.jks.enc -out codewars_juhezi.jks -d
