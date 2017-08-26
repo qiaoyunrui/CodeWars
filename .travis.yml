@@ -11,11 +11,11 @@ android:
   - sys-img-armeabi-v7a-android-20
 sudo: false
 script:
-- echo "Travis branch is $TRAVIS_BRANCH"
-- ./gradlew assembleRelease
-before_deploy:       # 部署之前
+  - echo "Travis branch is $TRAVIS_BRANCH"
+  - ./gradlew assembleRelease
   - name=`ls app/build/outputs/apk/`
   - mv $name app/build/outputs/apk/CodeWars.apk
+
 before_install:
 - chmod +x gradlew
 - openssl aes-256-cbc -K $encrypted_54c28a617310_key -iv $encrypted_54c28a617310_iv
