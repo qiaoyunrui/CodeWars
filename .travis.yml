@@ -23,7 +23,7 @@ before_deploy:
   - mv app/build/outputs/apk/app-codewars-release.apk app/build/outputs/apk/CodeWars.apk
 
 deploy:
-  provider: release
+  provider: releases
   api_key:
     secure: 2d92c1dbd0e040231e229b300b9221c0c2262a8e
   file: app/build/outputs/apk/CodeWars.apk
