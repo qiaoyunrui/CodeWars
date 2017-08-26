@@ -59,7 +59,7 @@ android {
                     }
                 }
             }*/
-            if (LOCAL_RELEASE) {
+            if (project.hasProperty("KEYSTORE_PASS")) {
                 applicationVariants.all { variant ->
                     variant.outputs.each { output ->
                         def outputFile = output.outputFile
