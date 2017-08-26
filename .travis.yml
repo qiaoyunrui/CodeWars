@@ -14,7 +14,7 @@ script:
   - echo "Travis branch is $TRAVIS_BRANCH"
   - ./gradlew assembleRelease
   - name=`ls app/build/outputs/apk/`
-  - mv $name app/build/outputs/apk/CodeWars.apk
+  - mv app/build/outputs/apk/$name app/build/outputs/apk/CodeWars.apk
 
 before_install:
 - chmod +x gradlew
