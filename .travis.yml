@@ -13,12 +13,15 @@ sudo: false
 script:
   - echo "Travis branch is $TRAVIS_BRANCH"
   - ./gradlew assembleRelease
-  - ls -R
+#  - ls -R
 
 before_install:
 - chmod +x gradlew
 - openssl aes-256-cbc -K $encrypted_54c28a617310_key -iv $encrypted_54c28a617310_iv
   -in codewars_juhezi.jks.enc -out codewars_juhezi.jks -d
+before_deploy:
+  - mv app/build/outputs/apk/app-codewars-release.apk app/build/outputs/apk/CodeWars.apk
+
 deploy:
   provider: release
   api_key:
