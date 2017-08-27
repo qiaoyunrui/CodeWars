@@ -30,5 +30,8 @@ deploy:
     repo: qiaoyunrui/CodeWars
     tags: true
     all_branches: true
-after_install:
+after_deploy:
 - fir p app/build/outputs/apk/app-release.apk -T $FIR_TOKEN -c "`git cat-file tag $TRAVIS_TAG`"
+notifications:
+  email:
+    - juhezi_auto@163.com
