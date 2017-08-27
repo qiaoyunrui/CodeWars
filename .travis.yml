@@ -11,23 +11,21 @@ android:
   - sys-img-armeabi-v7a-android-20
 sudo: false
 script:
-  - echo "Travis branch is $TRAVIS_BRANCH"
-  - ./gradlew assembleRelease
-#  - ls -R
-
+- echo "Travis branch is $TRAVIS_BRANCH"
+- "./gradlew assembleRelease"
 before_install:
 - chmod +x gradlew
 - openssl aes-256-cbc -K $encrypted_54c28a617310_key -iv $encrypted_54c28a617310_iv
   -in codewars_juhezi.jks.enc -out codewars_juhezi.jks -d
 before_deploy:
-  - mv app/build/outputs/apk/app-codewars-release.apk app/build/outputs/apk/CodeWars.apk
-
+- mv app/build/outputs/apk/app-codewars-release.apk app/build/outputs/apk/CodeWars.apk
 deploy:
   provider: releases
   api_key:
-    secure: 2d92c1dbd0e040231e229b300b9221c0c2262a8e
+    secure: cRv5nipuHHROEUP9BfgNYgsnIqfaJ5pdF9L19mM+rGD/Jsu+Ob7JQ04yn2qOR7T1fux5ASEYl/rCdGHvEDIHrhah+P8EST/XejBrGSnH58duuwxlU20hjYu/pQdZt7C5Q9gpO10Zazzb2IAufBV1IrwUVoPh48nAdZrTSE5Hj5c6cETaWoRG8oz7MAvI/faXQJN36WNZHnYvQMhYOhWO+AW/h55kmxOVlYSjCxATsSclT65wlJtfVW90wQTbiOmEIMDRvCSBxqYEgcr/EpRgx08nojg2pNjb4ZbKO5QYus5RmDipzOAX0mi0vP0qhzAQ6YfxtV/HdtphLCHUi7SZY34LnjsDoaPSvRWyxZxWOTB0X4eek28DJ8kK/fjSV9aePtNuxgcAlcCRp41JZzLj6VN6g5dhmZQUHwMvNWaAknsmC+qAU5QfG+0vbrspi0RTr5iS7oYQLesXYJtZnKjN0xchznS4rZ7Dui68Uju5DnePaAWXg7prnRPe0X+RLw1UeqDfKqIidsEbNPMdByweQY7YjXSUCGqN1PW2COGCLADn/l5HdDFy1inA+L3Pziso0rF/S/fb9z1eFGdCaq4sJxG+FVBDgoB40ZXQzJaj04zhcx+ZY4KR6uwx3yH2VrIDQASWN1s6xBgFiDKv+lOiM0s1eOIVf3uN3QiqjMU0nmg=
   file: app/build/outputs/apk/CodeWars.apk
   skip_cleanup: true
   on:
+    repo: qiaoyunrui/CodeWars
     tags: true
     all_branches: true
