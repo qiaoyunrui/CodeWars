@@ -17,6 +17,7 @@ before_install:
 - chmod +x gradlew
 - openssl aes-256-cbc -K $encrypted_54c28a617310_key -iv $encrypted_54c28a617310_iv
   -in codewars_juhezi.jks.enc -out codewars_juhezi.jks -d
+- gem install fir-cli
 before_deploy:
 - mv app/build/outputs/apk/app-codewars-release.apk app/build/outputs/apk/CodeWars.apk
 deploy:
@@ -29,7 +30,5 @@ deploy:
     repo: qiaoyunrui/CodeWars
     tags: true
     all_branches: true
-before_install:
-- gem install fir-cli
 after_install:
 - fir p app/build/outputs/apk/app-release.apk -T $FIR_TOKEN -c "`git cat-file tag $TRAVIS_TAG`"
