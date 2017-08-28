@@ -1,5 +1,6 @@
 package com.example.juhezi.test
 
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.support.annotation.RequiresApi
@@ -7,6 +8,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 
 import me.juhezi.module.base.BaseActivity
+import me.juhezi.module.base.knife.bindView
 import me.juhezi.module.base.widget.GradientTextView
 
 /**
@@ -15,7 +17,7 @@ import me.juhezi.module.base.widget.GradientTextView
  */
 class TestActivity : BaseActivity() {
 
-    lateinit var textView: GradientTextView
+    val textView: GradientTextView by bindView(R.id.tv_test)    //Test Success
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun installViews() {

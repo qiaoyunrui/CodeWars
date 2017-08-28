@@ -28,7 +28,7 @@ private val Activity.viewFinder: Activity.(Int) -> View?
     get() = { findViewById(it) }
 
 private class Lazy<T, V>(private val initializer: (T, KProperty<*>) -> V) : ReadOnlyProperty<T, V> {
-    private object EMPTY
+    private object EMPTY    //object 修饰 -> 单例
 
     private var value: Any? = EMPTY
 

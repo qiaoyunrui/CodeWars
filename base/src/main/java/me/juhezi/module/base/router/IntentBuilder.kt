@@ -9,7 +9,7 @@ import android.content.Intent
  */
 class IntentBuilder<T>(context: Context, clazz: Class<out T>) {
 
-    val intent: Intent = Intent(context, clazz)
+    private val intent: Intent = Intent(context, clazz)
 
     fun modify(action: Intent.() -> Intent) = intent.run(action)
 

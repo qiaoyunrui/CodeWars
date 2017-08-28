@@ -5,9 +5,8 @@ import android.support.v4.app.Fragment
 import me.juhezi.module.base.router.buildIntent
 
 /**
- * Created by max on 2017/8/17.
+ * Created by Juhezi on 2017/8/17.
  */
-val respository = ActivityClassRepository()
 
 //startActivity
 fun Activity.turn(key: String) = startActivity(buildIntent(this, key)) //这个是最基本的跳转

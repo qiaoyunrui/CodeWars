@@ -19,5 +19,4 @@ open class ClassRepository<T> : IRepository<Class<out T>> {
     }
 
     override fun size() = mMap.size
-
 }

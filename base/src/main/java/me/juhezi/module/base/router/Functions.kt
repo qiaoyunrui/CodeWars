@@ -3,7 +3,6 @@ package me.juhezi.module.base.router
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import me.juhezi.module.base.router.activity.respository
 import me.juhezi.module.base.router.activity.turn
 
 /**
@@ -12,6 +11,6 @@ import me.juhezi.module.base.router.activity.turn
 fun Intent.modify(action: Intent.() -> Unit) = apply(action)
 
 fun buildIntent(context: Context, key: String): Intent {
-    val clazz = respository.get(key)
+    val clazz = Repository.getActivityClass(key)    // -> 这里需要修改
     return IntentBuilder(context, clazz).build()
 }
