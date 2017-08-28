@@ -14,3 +14,5 @@ fun buildIntent(context: Context, key: String): Intent {
     val clazz = Repository.getActivityClass(key)    // -> 这里需要修改
     return IntentBuilder(context, clazz).build()
 }
+
+fun Any.register() = Repository.register(this::class.java)

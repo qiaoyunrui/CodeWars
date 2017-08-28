@@ -3,10 +3,12 @@
     package="me.juhezi.module.base">
 
     <application
-        android:theme="@style/BaseAppTheme"
         android:allowBackup="true"
         android:label="@string/app_name"
-        android:supportsRtl="true">
+        android:supportsRtl="true"
+        android:theme="@style/BaseAppTheme">
+
+        <activity android:name="me.juhezi.module.base.view.activity.DefaultActivity" />
 
     </application>
 
