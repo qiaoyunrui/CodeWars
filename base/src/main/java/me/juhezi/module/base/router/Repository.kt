@@ -63,6 +63,7 @@ class Repository {
                 SERVICE to ServiceClassRepository(),
                 WEB to WebRepository()))
 
+        @RequiresApi(Build.VERSION_CODES.N)
         fun print() {
             map.forEach { t, u -> "$t : $u".i() }
         }

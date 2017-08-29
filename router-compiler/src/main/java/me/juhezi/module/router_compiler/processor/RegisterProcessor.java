@@ -1,9 +1,11 @@
 package me.juhezi.module.router_compiler.processor;
 
 import com.google.auto.service.AutoService;
+import com.juhezi.module.router_annotation.annotation.Proxy;
 import com.juhezi.module.router_annotation.annotation.Register;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.io.Writer;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
@@ -22,6 +24,7 @@ import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.Elements;
 import javax.tools.JavaFileObject;
 
+import me.juhezi.module.router_compiler.ProxyHandler;
 import me.juhezi.module.router_compiler.extensions.MessagerExKt;
 
 /**
@@ -33,6 +36,7 @@ public class RegisterProcessor extends AbstractProcessor {
     private Filer mFileUtils;
     private Elements mElementUtils;
     private Messager mMessager;
+    private ProxyHandler mProxyHandler;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
@@ -45,6 +49,7 @@ public class RegisterProcessor extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> annotationTypes = new LinkedHashSet<>();
+        annotationTypes.add(Proxy.class.getCanonicalName());
         annotationTypes.add(Register.class.getCanonicalName());
         return annotationTypes;
     }
@@ -56,15 +61,29 @@ public class RegisterProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
-        Set<? extends Element> elements = roundEnvironment
+        Set<? extends Element> proxyElements = roundEnvironment
+                .getElementsAnnotatedWith(Proxy.class);
+        Set<? extends Element> registerElements = roundEnvironment
                 .getElementsAnnotatedWith(Register.class);
-        for (Element element : elements) {
-            if (!checkAnnotationUseValid(element)) return false;
-            TypeElement typeElement = (TypeElement) element;
-            String className = typeElement.getQualifiedName().toString();   //获得类名
-            MessagerExKt.print(mMessager, className);
+        if (proxyElements.size() <= 0) return false;
+        for (Element element : proxyElements) {
+            mProxyHandler = new ProxyHandler(element);
+            break;
         }
+        if (mProxyHandler == null) return false;
+        mProxyHandler.addAll(registerElements);
         return true;
+    }
+
+    private void generateCode() throws IOException {
+        JavaFileObject f = mFileUtils.createClassFile(
+                mProxyHandler.getGenerateClassName());
+        MessagerExKt.print(mMessager, "Creating " + f.toUri());
+        try (Writer w = f.openWriter()) {
+            PrintWriter pw = new PrintWriter(w);
+            pw.print(mProxyHandler.generate());
+            pw.flush();
+        }
     }
 
     private boolean checkAnnotationUseValid(Element element) {

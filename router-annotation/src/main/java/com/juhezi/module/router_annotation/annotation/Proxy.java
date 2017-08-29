@@ -5,11 +5,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-
 /**
- * Created by Juhezi on 2017/8/17.
+ * Created by Juhezi[juhezix@163.com] on 2017/8/29.
  */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.CLASS)
-public @interface Register {
+public @interface Proxy {
 }
