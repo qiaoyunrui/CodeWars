@@ -32,6 +32,12 @@ class TestActivity : BaseActivity() {
             textView.setGradientDrawable(drawable)
         }
 //        textView.setColors(Color.BLUE, Color.GREEN)
-        textView.setOnClickListener { turn("com.example.juhezi.test.TestActivity") }
+        textView.setOnClickListener {
+            //            turn("com.example.juhezi.test.TestActivity")
+            turn("", {
+                putExtra("name", "Juhezi")
+                putExtra("age", 22)
+            })
+        }
     }
 }
