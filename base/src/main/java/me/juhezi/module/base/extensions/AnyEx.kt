@@ -2,8 +2,8 @@ package me.juhezi.module.base.extensions
 
 import android.text.TextUtils
 import android.util.Log
-import kotlin.reflect.KProperty1
-import kotlin.reflect.full.memberProperties
+//import kotlin.reflect.KProperty1
+//import kotlin.reflect.full.memberProperties
 
 /**
  * Created by Juhezi[juhezix@163.com] on 2017/8/4.
@@ -34,8 +34,8 @@ fun Any.println() = println(this)
 
 fun Any.print() = print(this)
 
-inline fun <T : Any> T.desc() = this::class.memberProperties
+/*inline fun <T : Any> T.desc() = this::class.memberProperties
         .joinToString(separator = ";") { "${it.name} : ${it.getUnsafed(this@desc)}" }
 
 @Suppress("UNCHECKED_CAST")
-fun <T, R> KProperty1<T, R>.getUnsafed(receiver: Any): R = get(receiver as T)
+fun <T, R> KProperty1<T, R>.getUnsafed(receiver: Any): R = get(receiver as T)*/

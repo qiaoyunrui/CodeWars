@@ -32,7 +32,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
-    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+//    compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
     // Module
     annotationProcessor project(':router-compiler')
