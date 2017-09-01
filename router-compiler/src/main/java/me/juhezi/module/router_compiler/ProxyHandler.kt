@@ -1,5 +1,6 @@
 package me.juhezi.module.router_compiler
 
+import com.juhezi.module.router_annotation.annotation.Proxy
 import javax.lang.model.element.Element
 import javax.lang.model.element.TypeElement
 
@@ -9,8 +10,9 @@ import javax.lang.model.element.TypeElement
 const val SUFFIX = "\$Proxy"
 
 class ProxyHandler(private var proxyElement: Element) {
-    private val registerElement: MutableList<Element> = ArrayList()
-    var typeElement: TypeElement = proxyElement.enclosedElements as TypeElement
+    private val registerElement: ArrayList<Element> = ArrayList()
+
+    var typeElement: TypeElement = proxyElement.enclosingElement as TypeElement
 
     fun add(element: Element) = registerElement.add(element)
 

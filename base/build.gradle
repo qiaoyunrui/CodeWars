@@ -41,12 +41,12 @@ dependencies {
     // compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
     // Module
-    kapt project(':router-compiler')
+    annotationProcessor project(':router-compiler')
     compile project(':router-api')
 
     // ButterKnife
     compile "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
-    kapt "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
 }
 repositories {
     mavenCentral()

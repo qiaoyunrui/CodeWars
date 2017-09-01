@@ -67,11 +67,17 @@ public class RegisterProcessor extends AbstractProcessor {
                 .getElementsAnnotatedWith(Register.class);
         if (proxyElements.size() <= 0) return false;
         for (Element element : proxyElements) {
+            MessagerExKt.print(mMessager, element.toString());
             mProxyHandler = new ProxyHandler(element);
             break;
         }
         if (mProxyHandler == null) return false;
         mProxyHandler.addAll(registerElements);
+        try {
+            generateCode();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return true;
     }
 
@@ -82,6 +88,7 @@ public class RegisterProcessor extends AbstractProcessor {
         try (Writer w = f.openWriter()) {
             PrintWriter pw = new PrintWriter(w);
             pw.print(mProxyHandler.generate());
+            pw.print("HelloWorld");
             pw.flush();
         }
     }
