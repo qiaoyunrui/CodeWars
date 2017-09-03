@@ -31,7 +31,7 @@ public class ${getSimpleGenerateClassName()} implements me.juhezi.module.router_
 
     @Override
     public void proxy() {
-        me.juhezi.module.base.router.Repository.register(com.example.juhezi.test.TestActivity.class);
+        ${getRegisterLines()}
     }
 
 }
@@ -45,6 +45,13 @@ public class ${getSimpleGenerateClassName()} implements me.juhezi.module.router_
     private fun getPackageName(): String {
         val name = proxyElement.toString()
         return name.substring(0, name.lastIndexOf('.'))
+    }
+
+    private fun getRegisterLines(): String = buildString {
+        registerElement.forEach {
+            append("me.juhezi.module.base.router.Repository.register($it.class);")
+            append("\n")
+        }
     }
 
 }

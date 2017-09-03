@@ -19,4 +19,10 @@ open class ClassRepository<T> : IRepository<Class<out T>> {
     }
 
     override fun size() = mMap.size
+
+    override fun toString(): String = buildString {
+        mMap.entries.forEach {
+            append("[${it.key}] -> [${it.value}]").append("\n")
+        }
+    }
 }

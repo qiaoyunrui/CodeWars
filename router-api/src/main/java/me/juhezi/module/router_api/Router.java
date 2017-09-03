@@ -19,18 +19,29 @@ public class Router {
 
     public static void inject(Application application) {
         if (application == null) return;
-        IRouterProxy iRouterProxy = findProxy(application.getClass().getName() + SUFFIX);
+        IRouterProxy iRouterProxy = findProxy(application.getClass());
         if (iRouterProxy != null) {
             iRouterProxy.proxy();
         }
     }
 
+    /**
+     * 不通过反射的方式进行注册
+     *
+     * @param proxy
+     */
+    public static void inject(IRouterProxy proxy) {
+        if (proxy != null) {
+            proxy.proxy();
+        }
+    }
+
     @TargetApi(Build.VERSION_CODES.KITKAT)
-    private static IRouterProxy findProxy(String name) {
+    private static IRouterProxy findProxy(Class clazz) {
         try {
-            Class clazz = Class.forName(name);
-            if (clazz == null) return null;
-            Object o = clazz.newInstance();
+            Class proxyClass = clazz.getClassLoader().loadClass(clazz.getName() + SUFFIX);
+            if (proxyClass == null) return null;
+            Object o = proxyClass.newInstance();
             if (o instanceof IRouterProxy) {
                 return (IRouterProxy) o;
             }
@@ -39,4 +50,5 @@ public class Router {
         }
         return null;
     }
+
 }
