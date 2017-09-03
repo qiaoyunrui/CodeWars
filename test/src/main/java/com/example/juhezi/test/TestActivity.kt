@@ -27,13 +27,14 @@ class TestActivity : BaseActivity() {
     override fun installViews() {
         setContentView(R.layout.layout_test)
         showContentView()
+        Repository.print()
         val drawable = resources.getDrawable(R.drawable.gradient_blue)
         if (drawable is GradientDrawable) {
             textView.setGradientDrawable(drawable)
         }
 //        textView.setColors(Color.BLUE, Color.GREEN)
         textView.setOnClickListener {
-            turn("com.example.juhezi.test.TestActivity")
+            turn("com.example.juhezi.test.HelloActivity")
             /*turn("", {
                 putExtra("name", "Juhezi")
                 putExtra("age", 22)

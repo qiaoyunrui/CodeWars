@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-kapt'
+//apply plugin: 'kotlin-kapt'
 
 
 def mApplicationId = "me.juhezi.codewars.test"
@@ -30,4 +30,8 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
     // Module
     compile project(':base')
+
+    //Router
+    annotationProcessor project(':router-compiler')
+    compile project(':router-api')
 }
