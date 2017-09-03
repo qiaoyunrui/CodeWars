@@ -12,8 +12,6 @@ const val SUFFIX = "\$Proxy"
 class ProxyHandler(private var proxyElement: Element) {
     private val registerElement: ArrayList<Element> = ArrayList()
 
-    var typeElement: TypeElement = proxyElement.enclosingElement as TypeElement
-
     fun add(element: Element) = registerElement.add(element)
 
     fun remove(element: Element) = registerElement.remove(element)
@@ -29,23 +27,23 @@ class ProxyHandler(private var proxyElement: Element) {
         return """
 package ${getPackageName()};
 
-public class ${getSimpleGenerateClassName()} implements IRouterProxy {
+public class ${getSimpleGenerateClassName()} implements me.juhezi.module.router_api.IRouterProxy {
 
     @Override
     public void proxy() {
-        Repository.register(me.juhezi.module.base.view.activity.DefaultActivity.class);
+        me.juhezi.module.base.router.Repository.register(com.example.juhezi.test.TestActivity.class);
     }
 
 }
         """
     }
 
-    fun getGenerateClassName(): String = typeElement.qualifiedName.toString() + SUFFIX
+    fun getGenerateClassName(): String = proxyElement.toString() + SUFFIX
 
-    private fun getSimpleGenerateClassName() = typeElement.simpleName.toString() + SUFFIX
+    private fun getSimpleGenerateClassName() = proxyElement.simpleName.toString() + SUFFIX
 
     private fun getPackageName(): String {
-        val name = typeElement.qualifiedName.toString()
+        val name = proxyElement.toString()
         return name.substring(0, name.lastIndexOf('.'))
     }
 

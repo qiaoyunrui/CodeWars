@@ -8,6 +8,7 @@ import butterknife.BindView
 import butterknife.ButterKnife
 
 import me.juhezi.module.base.BaseActivity
+import me.juhezi.module.base.extensions.i
 import me.juhezi.module.base.knife.bindView
 import me.juhezi.module.base.router.Repository
 import me.juhezi.module.base.router.activity.turn
@@ -20,12 +21,11 @@ import me.juhezi.module.base.widget.GradientTextView
  */
 class TestActivity : BaseActivity() {
 
-    val textView: GradientTextView by bindView(R.id.tv_test)    //Test Success
+    private val textView: GradientTextView by bindView(R.id.tv_test)
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun installViews() {
         setContentView(R.layout.layout_test)
-        register()
         showContentView()
         val drawable = resources.getDrawable(R.drawable.gradient_blue)
         if (drawable is GradientDrawable) {
@@ -33,11 +33,11 @@ class TestActivity : BaseActivity() {
         }
 //        textView.setColors(Color.BLUE, Color.GREEN)
         textView.setOnClickListener {
-            //            turn("com.example.juhezi.test.TestActivity")
-            turn("", {
+            turn("com.example.juhezi.test.TestActivity")
+            /*turn("", {
                 putExtra("name", "Juhezi")
                 putExtra("age", 22)
-            })
+            })*/
         }
     }
 }
