@@ -34,4 +34,7 @@ dependencies {
     //Router
     annotationProcessor project(':router-compiler')
     compile project(':router-api')
+
+    //ButterKnife
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
 }
