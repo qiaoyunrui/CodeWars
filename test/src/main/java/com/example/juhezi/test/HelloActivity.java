@@ -33,7 +33,6 @@ public class HelloActivity extends BaseActivity {
         bitmap = BlurUtils.blur(bitmap, 50);
 //        Log.i("TAG", "installViews: " + mIvBackground);
         mIvBackground.setImageBitmap(bitmap);
-        runOnUiThread();
     }
 
     @Override

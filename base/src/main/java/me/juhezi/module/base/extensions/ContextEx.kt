@@ -73,7 +73,3 @@ fun Context.getAppVersion(): Int {
     }
     return 1
 }
-
-
-
-
