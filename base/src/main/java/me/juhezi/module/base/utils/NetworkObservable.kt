@@ -6,16 +6,16 @@ import android.net.NetworkInfo
  * Created by Juhezi[juhezix@163.com] on 2017/9/18.
  * 被观察者
  */
-class NetworkObservable : Observable<NetworkOberver>() {
+class NetworkObservable : Observable<NetworkObserver>() {
 
     fun notifyNetworkChanged(networkConnected: Boolean,
                              currentNetwork: NetworkInfo?,
-                             nextNetwork: NetworkInfo?) =
+                             lastNetwork: NetworkInfo?) =
             synchronized(mObservers) {
                 mObservers.forEach {
                     it.onNetworkStateChanged(networkConnected,
                             currentNetwork,
-                            nextNetwork)
+                            lastNetwork)
                 }
             }
 
