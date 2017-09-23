@@ -7,6 +7,7 @@ import android.content.res.Resources
  */
 class ViewUtils {
     companion object {
+        @JvmStatic
         fun getStatusbarHeight() =
                 Resources.getSystem()
                         .getDimensionPixelSize(

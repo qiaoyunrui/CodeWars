@@ -109,10 +109,11 @@ class NetworkManager private constructor() {
             val noConnectivity = intent.getBooleanExtra(
                     ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
             mNetworkConnected = !noConnectivity
-            if (mNetworkConnected) {
-                mCurrentNetwork = mConnectivityManager?.activeNetworkInfo
+            mCurrentNetwork = if (mNetworkConnected) {
+                mConnectivityManager?.activeNetworkInfo
             } else {
-                mCurrentNetwork = null
+                //没有网络连接
+                null
             }
             mNetworkObservable.notifyNetworkChanged(mNetworkConnected, mCurrentNetwork, lastNetwork)
         }
