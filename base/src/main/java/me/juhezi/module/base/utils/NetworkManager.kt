@@ -3,6 +3,7 @@ package me.juhezi.module.base.utils
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 
@@ -42,6 +43,60 @@ class NetworkManager private constructor() {
         mCurrentNetwork = mConnectivityManager?.activeNetworkInfo
         mNetworkConnected = ((null != mCurrentNetwork) and
                 mCurrentNetwork!!.isConnected)
+    }
+
+    fun registerReceiver(context: Context) {
+        if (mNetworkReceiver != null) {
+            context.registerReceiver(mNetworkReceiver,
+                    IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        }
+    }
+
+    fun unregisterReceiver(context: Context) {
+        if (mConnectivityManager != null &&
+                mNetworkReceiver != null) {
+            context.unregisterReceiver(mNetworkReceiver)
+        }
+    }
+
+    /**
+     * 网络是否连接
+     */
+    fun isNetworkConnected(): Boolean {
+        mNetworkConnected = (mCurrentNetwork != null) && mCurrentNetwork!!.isConnected
+        return mNetworkConnected
+    }
+
+    /**
+     * 获取当前网络信息
+     */
+    fun getCurrentNetwork() = mCurrentNetwork
+
+    /**
+     * 注册一个网络状态观察者
+     */
+    fun registerNetworkObserver(observer: NetworkObserver) {
+        try {
+            synchronized(mNetworkObservable) {
+                mNetworkObservable.registerObserver(observer)
+            }
+        } catch (e: Exception) {
+        }
+    }
+
+    fun unregisterNetworkObserver(observer: NetworkObserver) {
+        try {
+            synchronized(mNetworkObservable) {
+                mNetworkObservable.unregisterObserver(observer)
+            }
+        } catch (e: Exception) {
+        }
+    }
+
+    fun unregisterAllObservers() {
+        synchronized(mNetworkObservable) {
+            mNetworkObservable.unregisterAll()
+        }
     }
 
     private inner class NetworkReceiver : BroadcastReceiver() {
