@@ -47,6 +47,17 @@ dependencies {
     // ButterKnife
     compile "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
+    // Retrofit
+    compile "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit2Version"
+    // Retrofit Gson converter
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit2Version"
+    // Retrofit logging
+    compile "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.okhttp3Version"
+    // RxJava/RxAndroid
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxjava2Version"
+    compile "io.reactivex.rxjava2:rxandroid:$rootProject.ext.rxandroid2Version"
+    // Retrofit RxJava Adapter
+    compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.retrofit2Version"
 }
 repositories {
     mavenCentral()
