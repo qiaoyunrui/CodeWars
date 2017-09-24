@@ -52,6 +52,7 @@ Travis CI|![icon](https://travis-ci.org/qiaoyunrui/CodeWars.svg?branch=master)
 
 - [x] HandlerBuilder [with Test]
 
+- [x] Network 
 
 ## Modules
 
