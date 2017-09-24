@@ -12,8 +12,15 @@ import me.juhezi.module.router_api.Router
  */
 open class BaseApplication : Application() {
 
+    companion object {
+        private lateinit var sInstance: BaseApplication
+        @JvmStatic
+        fun getInstance() = sInstance
+    }
+
     override fun onCreate() {
         super.onCreate()
+        sInstance = this
         onInject()
     }
 

@@ -73,3 +73,11 @@ fun Context.getAppVersion(): Int {
     }
     return 1
 }
+
+fun Context.getAppVersionName() = try {
+    val info = packageManager.getPackageInfo(packageName, 0)
+    info.versionName.replace(" ", "")
+} catch (e: PackageManager.NameNotFoundException) {
+    e.printStackTrace()
+    ""
+}

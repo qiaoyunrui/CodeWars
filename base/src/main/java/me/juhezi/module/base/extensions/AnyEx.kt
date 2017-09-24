@@ -1,9 +1,9 @@
 package me.juhezi.module.base.extensions
 
-import android.os.Handler
 import android.text.TextUtils
 import android.util.Log
-import me.juhezi.module.base.builder.buildUIHandler
+import me.juhezi.module.base.BuildConfig
+import me.juhezi.module.base.functions.isDebug
 
 //import kotlin.reflect.KProperty1
 //import kotlin.reflect.full.memberProperties
@@ -42,3 +42,14 @@ fun Any.print() = print(this)
 
 @Suppress("UNCHECKED_CAST")
 fun <T, R> KProperty1<T, R>.getUnsafed(receiver: Any): R = get(receiver as T)*/
+
+fun Any.dd(message: String) {
+    if (isDebug())
+        d(message)
+}
+
+fun Any.di(message: String) {
+    if (isDebug()) {
+        i(message)
+    }
+}

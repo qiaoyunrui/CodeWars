@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import butterknife.ButterKnife
 import butterknife.Unbinder
+import io.reactivex.disposables.CompositeDisposable
+import io.reactivex.disposables.Disposable
 
 /**
  * Created by Juhezi[juhezix@163.com] on 2017/8/3.
@@ -50,6 +52,8 @@ open class BaseActivity : AppCompatActivity() {
     private val refreshAction = onRefresh()
 
     private var mInflater: LayoutInflater? = null
+
+    private var mCompositeDisposable: CompositeDisposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -140,6 +144,17 @@ open class BaseActivity : AppCompatActivity() {
         mErrorView = null
         mLoadingView = null
         mNoNetworkView = null
+    }
+
+    fun addDisposable(disposable: Disposable) {
+        if (mCompositeDisposable == null) {
+            mCompositeDisposable = CompositeDisposable()
+        }
+        mCompositeDisposable!!.add(disposable)
+    }
+
+    fun clearCompositeDisposable() {
+        mCompositeDisposable?.clear()
     }
 
 }
