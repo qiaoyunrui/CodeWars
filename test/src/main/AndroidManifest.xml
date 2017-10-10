@@ -19,5 +19,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".HelloActivity" />
+        <activity android:name=".IMMActivity" />
     </application>
 </manifest>

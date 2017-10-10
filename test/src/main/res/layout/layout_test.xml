@@ -13,4 +13,12 @@
         android:textColor="@color/colorAccent"
         android:textSize="25sp" />
 
+    <Button
+        android:id="@+id/btn_turn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/colorAccent"
+        android:text="turn" />
+
 </RelativeLayout>

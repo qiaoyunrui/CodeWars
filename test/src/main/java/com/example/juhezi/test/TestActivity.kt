@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.support.annotation.RequiresApi
+import android.widget.Button
 import butterknife.BindView
 import butterknife.ButterKnife
 
@@ -22,6 +23,7 @@ import me.juhezi.module.base.widget.GradientTextView
 class TestActivity : BaseActivity() {
 
     private val textView: GradientTextView by bindView(R.id.tv_test)
+    private val button: Button by bindView(R.id.btn_turn)
 
     @RequiresApi(Build.VERSION_CODES.N)
     override fun installViews() {
@@ -39,6 +41,9 @@ class TestActivity : BaseActivity() {
                 putExtra("name", "Juhezi")
                 putExtra("age", 22)
             })*/
+        }
+        button.setOnClickListener {
+            turn("com.example.juhezi.test.IMMActivity")
         }
     }
 }
