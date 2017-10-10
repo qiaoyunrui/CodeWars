@@ -20,14 +20,10 @@ ext {
     // third-party
     butterKnifeVersion = '8.6.0'
     autoServiceVersion = '1.0-rc3'
-    retrofit2Version = '2.3.0'
-    okhttp3Version = '3.8.0'
-    rxjava2Version = '2.1.0'
-    rxandroid2Version = '2.0.1'
 }
 
 buildscript {
-    ext.kotlinVersion = '1.1.4-2'
+    ext.kotlinVersion = '1.1.51'
     repositories {
         jcenter()
 //        preview->>
