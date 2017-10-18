@@ -88,6 +88,15 @@ class Repository {
             }
         }
 
+        /**
+         * 使用类名进行注册
+         */
+        @JvmStatic
+        fun register(className: String) {
+            val clazz = Class.forName(className)
+            register(clazz)
+        }
+
         @JvmStatic
         @Suppress("UNCHECKED_CAST")
         fun getActivityClass(key: String): Class<out Activity> =

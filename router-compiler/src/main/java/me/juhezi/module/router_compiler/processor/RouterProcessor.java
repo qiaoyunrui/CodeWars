@@ -76,6 +76,9 @@ public class RouterProcessor extends AbstractProcessor {
         for (Element element : registerElements) {
             MessagerExKt.print(mMessager, element.getSimpleName().toString() + "---->");
         }*/
+        for (Element element : registerElements) {
+            MessagerExKt.print(mMessager, element.getSimpleName().toString() + "---->");
+        }
         if (proxyElements.size() <= 0) return false;
         for (Element element : proxyElements) {
             mProxyHandler = new ProxyHandler(element);

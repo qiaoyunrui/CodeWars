@@ -5,6 +5,7 @@ def mBateApplicationId = "me.juhezi.bate.codewars"
 def app_name_release = "CodeWars"
 def debug_suffix = "debug"
 def mCommonFlavorDimension = "common"
+
 static def currentSecond() {
     return new Date().format("ss", TimeZone.getTimeZone("GMT+8"))
 }
@@ -15,6 +16,7 @@ static def currentSecond() {
 static def currentTime() {
     return new Date().format("yyyy_MM_dd", TimeZone.getTimeZone("GMT+8"))
 }
+
 android {
     signingConfigs {
         releaseConfig {
@@ -100,6 +102,7 @@ android {
         mavenCentral()
     }
 }
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -117,4 +120,12 @@ dependencies {
 
     //module
     compile project(':base')
+
+    //Router
+    annotationProcessor project(':router-compiler')
+    compile project(':router-api')
+
+    if (!cameraSingle.toBoolean()) { // Application
+        compile project(':camera')
+    }
 }
