@@ -26,6 +26,10 @@ public class IMMActivity extends BaseActivity {
     Button mBtnSave;
     @BindView(R.id.btn_edit)
     Button mBtnEdit;
+    @BindView(R.id.btn_test)
+    Button mBtnTest;
+
+    private boolean mFlag = true;
 
     @Override
     protected void installViews() {
@@ -35,6 +39,7 @@ public class IMMActivity extends BaseActivity {
             @Override
             public void onAction(int size) {
                 int keyboardHeight = IMMUtils.getKeyboardHeight(IMMActivity.this);
+                Log.i(TAG, "onAction: size is " + size + " " + keyboardHeight);
                 mBtnSave.setY(((View) mBtnSave.getParent()).getHeight()
                         - keyboardHeight - mBtnSave.getHeight());
                 if (keyboardHeight == 0) {
@@ -67,8 +72,28 @@ public class IMMActivity extends BaseActivity {
                 save();
             }
         });
+        mBtnTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                /*if (mFlag) {
+                    mEtContent.setFocusable(true);
+                    mEtContent.setFocusableInTouchMode(true);
+                    mEtContent.requestFocus();
+                } else {
+                    mEtContent.setFocusableInTouchMode(false);
+                    mEtContent.setFocusable(false);
+                }*/
+                mFlag = !mFlag;
+                mEtContent.setText(System.currentTimeMillis() % 10 + "");
+                Log.i(TAG, "onClick: " + mEtContent.getText());
+            }
+        });
     }
 
+    //初始化界面的时候，回调一定会执行
+    //修改控件可见性会导致回调执行
+    //但是重复设置相同可见性不会调用
+    //setFocusable 不会调用
     private void edit() {
         //showKeyboard
         mEtContent.setFocusable(true);
