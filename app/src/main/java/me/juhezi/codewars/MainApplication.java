@@ -16,6 +16,14 @@ public class MainApplication extends BaseApplication {
     public void onInject() {
         super.onInject();
         Router.inject(this);
+        routerRegist();
+    }
+
+    /**
+     * 路由注册
+     */
+    private void routerRegist() {
         Repository.register("me.juhezi.module.camera.MainActivity");
     }
+
 }

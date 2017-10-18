@@ -93,8 +93,13 @@ class Repository {
          */
         @JvmStatic
         fun register(className: String) {
-            val clazz = Class.forName(className)
-            register(clazz)
+            val clazz = try {
+                Class.forName(className)
+            } catch (e: Exception) {
+                null
+            }
+            if (clazz != null)
+                register(clazz)
         }
 
         @JvmStatic
