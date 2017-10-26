@@ -14,7 +14,6 @@ import android.graphics.drawable.Drawable;
 import android.support.annotation.IntDef;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
@@ -42,6 +41,16 @@ public class CameraButton extends View {
     private static final long DEFAULT_ANIM_DURATION = 1000;
 
     private long mAnimDuration = DEFAULT_ANIM_DURATION;
+
+    private static final long DEFAULT_CLICK_LIMIT_TIME = 500;
+
+    private static final long DEFAULT_CLICK_MAX_TIME = 15000;   //最长时间为 15 秒
+
+    private static final float DEFAULT_ZOOM_LOAD_FACTOR = 0.75f;
+
+    private long mClickLimitTime = DEFAULT_CLICK_LIMIT_TIME;
+    private long mClickMaxTime = DEFAULT_CLICK_MAX_TIME;
+    private float mZoomLoadFactor = DEFAULT_ZOOM_LOAD_FACTOR;
 
     @CameraButton.State
     private int mCurrentState = INIT_STATE; //当前状态
@@ -89,6 +98,19 @@ public class CameraButton extends View {
     private ValueAnimator mUnexpendAnim;
 
     private float mCurrentPercent = 0f;
+
+    private boolean mCanClick = true;    //是否可以点击
+
+    //Record Touch-Event Time
+    private long mStartTime;     //开始点击时间
+    private long mCurrentTime;  //当前时间
+    private long mEndTime;  //结束点击时间
+
+    private float mCurrentZoom = 1.0f;
+
+    private OnSingleClickListener mOnSingleClickListener;
+    private OnLongClickListener mOnLongClickListener;
+    private OnZoomListener mOnZoomListener;
 
     public CameraButton(Context context) {
         this(context, null);
@@ -315,34 +337,126 @@ public class CameraButton extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                if (mCurrentState == STATE_IDLE) {
-                    mExpendAnim.setFloatValues(0f, 1f);
-                    mExpendAnim.setDuration(mAnimDuration);
-                    mExpendAnim.start();
-                }
-                if (mCurrentState == STATE_UNEXPANDING && mUnexpendAnim.isRunning()) {
-                    mUnexpendAnim.cancel();
-                    mExpendAnim.setFloatValues(mCurrentPercent, 1f);
-                    mExpendAnim.setDuration((long) ((1 - mCurrentPercent) * mAnimDuration));
-                    mExpendAnim.start();
+                checkCanClick();
+                if (mCanClick) {
+                    mStartTime = System.currentTimeMillis();
+                    if (mOnLongClickListener != null) {
+                        mOnLongClickListener.onStartLongClick();
+                    }
+                    if (mCurrentState == STATE_IDLE) {
+                        mExpendAnim.setFloatValues(0f, 1f);
+                        mExpendAnim.setDuration(mAnimDuration);
+                        mExpendAnim.start();
+                    } else if (mCurrentState == STATE_UNEXPANDING && mUnexpendAnim.isRunning()) {
+                        mUnexpendAnim.cancel();
+                        mExpendAnim.setFloatValues(mCurrentPercent, 1f);
+                        mExpendAnim.setDuration((long) ((1 - mCurrentPercent) * mAnimDuration));
+                        mExpendAnim.start();
+                    }
                 }
                 break;
-            case MotionEvent.ACTION_SCROLL:
+            case MotionEvent.ACTION_MOVE:
+                if (mCanClick) {
+                    mCurrentTime = System.currentTimeMillis();
+                    observeClickEvent();
+                    dispatchZoomEvent(event);
+                }
                 break;
             case MotionEvent.ACTION_UP:
-                if (mCurrentState == STATE_EXPANDED) {
-                    mUnexpendAnim.setFloatValues(1f, 0f);
-                    mUnexpendAnim.start();
-                }
-                if (mCurrentState == STATE_EXPANDING && mExpendAnim.isRunning()) {
-                    mExpendAnim.cancel();
-                    mUnexpendAnim.setFloatValues(mCurrentPercent, 0f);
-                    mUnexpendAnim.setDuration((long) (mCurrentPercent * mAnimDuration));
-                    mUnexpendAnim.start();
+                mEndTime = System.currentTimeMillis();
+                if (mCanClick) {
+                    dispatchClickEvent();
+                    if (mCurrentState == STATE_EXPANDED) {
+                        mUnexpendAnim.setFloatValues(1f, 0f);
+                        mUnexpendAnim.setDuration(mAnimDuration);
+                        mUnexpendAnim.start();
+                    } else if (mCurrentState == STATE_EXPANDING && mExpendAnim.isRunning()) {
+                        mExpendAnim.cancel();
+                        mUnexpendAnim.setFloatValues(mCurrentPercent, 0f);
+                        mUnexpendAnim.setDuration((long) (mCurrentPercent * mAnimDuration));
+                        mUnexpendAnim.start();
+                    }
                 }
                 break;
         }
         return true;
+    }
+
+    private void dispatchZoomEvent(MotionEvent motionEvent) {
+        float dy = motionEvent.getY() - mHeight / 2;
+        if (dy < 0 && mOnZoomListener != null) {
+            mCurrentZoom = -dy / mOuterCircleRadius * 2 * mZoomLoadFactor;
+            if (mCurrentZoom < 1.0f) {
+                mCurrentZoom = 1.0f;
+            }
+            mOnZoomListener.onZoom(mCurrentZoom);
+        }
+    }
+
+    private void dispatchClickEvent() {
+        long duration = mEndTime - mStartTime;
+        if (duration >= 0 && duration < mClickLimitTime) {
+            if (mOnSingleClickListener != null) {
+                mOnSingleClickListener.onClick();
+            }
+            if (mOnLongClickListener != null) {
+                mOnLongClickListener.onCancelLongClick();
+            }
+        } else if (duration >= mClickLimitTime) {
+            if (mOnLongClickListener != null) {
+                mOnLongClickListener.onEndLongClick();
+            }
+        }
+    }
+
+    /**
+     * 检测是否可以点击
+     */
+    private void checkCanClick() {
+        if (mClickMaxTime <= 0)
+            mCanClick = false;
+    }
+
+    /**
+     * 检测是否超时,若果超时立刻执行结束动画
+     */
+    private void observeClickEvent() {
+        long duration = mCurrentTime - mStartTime;
+        if (duration >= mClickMaxTime) {
+            mCanClick = false;
+            endClick();
+        }
+    }
+
+    /**
+     * 结束点击
+     */
+    private void endClick() {
+        //Anim
+        if (mCurrentState == STATE_EXPANDED) {
+            mUnexpendAnim.setFloatValues(1f, 0f);
+            mUnexpendAnim.setDuration(mAnimDuration);
+            mUnexpendAnim.start();
+        } else if (mCurrentState == STATE_EXPANDING && mExpendAnim.isRunning()) {
+            mExpendAnim.cancel();
+            mUnexpendAnim.setFloatValues(mCurrentPercent, 0f);
+            mUnexpendAnim.setDuration((long) (mCurrentPercent * mAnimDuration));
+            mUnexpendAnim.start();
+        }
+        //这一部分必须只能执行一次
+        long duration = mCurrentTime - mStartTime;
+        if (duration >= 0 && duration < mClickLimitTime) {
+            if (mOnSingleClickListener != null) {
+                mOnSingleClickListener.onClick();
+            }
+            if (mOnLongClickListener != null) {
+                mOnLongClickListener.onCancelLongClick();
+            }
+        } else if (duration >= mClickLimitTime) {
+            if (mOnLongClickListener != null) {
+                mOnLongClickListener.onEndLongClick();
+            }
+        }
     }
 
     //------------------------get & set--------------------------
@@ -419,6 +533,26 @@ public class CameraButton extends View {
         this.mOuterCirclePressedDrawable = outerCirclePressedDrawable;
     }
 
+    public long getClickLimitTime() {
+        return mClickLimitTime;
+    }
+
+    public void setClickLimitTime(long mClickLimitTime) {
+        this.mClickLimitTime = mClickLimitTime;
+    }
+
+    public void setOnSingleClickListener(OnSingleClickListener onSingleClickListener) {
+        this.mOnSingleClickListener = onSingleClickListener;
+    }
+
+    public void setOnLongClickListener(OnLongClickListener onLongClickListener) {
+        this.mOnLongClickListener = onLongClickListener;
+    }
+
+    public void setOnZoomListener(OnZoomListener onZoomListener) {
+        this.mOnZoomListener = onZoomListener;
+    }
+
     //-------------------------------Inner Class--------------------------------
 
     private static class Point {
@@ -437,6 +571,23 @@ public class CameraButton extends View {
                     ", y=" + y +
                     '}';
         }
+    }
+
+    //--------------------------------interface----------------------------------
+    public interface OnSingleClickListener {
+        void onClick();
+    }
+
+    public interface OnLongClickListener {
+        void onStartLongClick();
+
+        void onEndLongClick();
+
+        void onCancelLongClick();   //时间不够长
+    }
+
+    public interface OnZoomListener {
+        void onZoom(float scale);
     }
 
 }
