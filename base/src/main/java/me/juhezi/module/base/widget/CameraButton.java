@@ -44,7 +44,7 @@ public class CameraButton extends View {
 
     private static final long DEFAULT_CLICK_LIMIT_TIME = 500;
 
-    private static final long DEFAULT_CLICK_MAX_TIME = 15000;   //最长时间为 15 秒
+    private static final long DEFAULT_CLICK_MAX_TIME = 5000;   //最长时间为 15 秒
 
     private static final float DEFAULT_ZOOM_LOAD_FACTOR = 0.75f;
 
@@ -413,8 +413,11 @@ public class CameraButton extends View {
      * 检测是否可以点击
      */
     private void checkCanClick() {
-        if (mClickMaxTime <= 0)
+        if (mClickMaxTime <= 0) {
             mCanClick = false;
+        } else if (mCurrentState == STATE_IDLE) {
+            mCanClick = true;
+        }
     }
 
     /**
