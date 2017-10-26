@@ -44,12 +44,12 @@ public class CameraButton extends View {
 
     private static final long DEFAULT_CLICK_LIMIT_TIME = 500;
 
-    private static final long DEFAULT_CLICK_MAX_TIME = 5000;   //最长时间为 15 秒
+    private static final long DEFAULT_CLICK_MAX_TIME = 15000;   //最长时间为 15 秒
 
     private static final float DEFAULT_ZOOM_LOAD_FACTOR = 0.75f;
 
-    private long mClickLimitTime = DEFAULT_CLICK_LIMIT_TIME;
-    private long mClickMaxTime = DEFAULT_CLICK_MAX_TIME;
+    private long mClickLimitTime = DEFAULT_CLICK_LIMIT_TIME;//判断是否为长按的 Tag
+    private long mClickMaxTime = DEFAULT_CLICK_MAX_TIME;    //点击最大时间
     private float mZoomLoadFactor = DEFAULT_ZOOM_LOAD_FACTOR;
 
     @CameraButton.State
@@ -556,6 +556,13 @@ public class CameraButton extends View {
         this.mOnZoomListener = onZoomListener;
     }
 
+    public void setClickMaxTime(long clickMaxTime) {
+        this.mClickMaxTime = clickMaxTime;
+    }
+
+    public long getDistanceTime() {
+        return mCurrentTime - mStartTime;
+    }
     //-------------------------------Inner Class--------------------------------
 
     private static class Point {
