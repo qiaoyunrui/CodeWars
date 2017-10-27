@@ -63,8 +63,8 @@ public class CameraButton extends View {
     private @interface State {
     }
 
-    private static final float DEFAULT_INNER_CIRCLE_RADIUS = 100.0f;
-    private static final float DEFAULT_OUTER_CIRCLE_RADIUS = 150.0f;
+    private static final float DEFAULT_INNER_CIRCLE_RADIUS = 80.0f;
+    private static final float DEFAULT_OUTER_CIRCLE_RADIUS = 90.0f;
 
     private static final float DEFAULT_INNER_CIRCLE_SCALE = 0.8f;
     private static final float DEFAULT_OUTER_CIRCLE_SCALE = 1.2f;
@@ -72,7 +72,7 @@ public class CameraButton extends View {
     private static final int DEFAULT_INNER_NORMAL_COLOR = Color.RED;
     private static final int DEFAULT_OUTER_NORMAL_COLOR = Color.GREEN;
 
-    private static final int DEFAULT_INNER_PRESSED_COLOR = Color.BLACK;
+    private static final int DEFAULT_INNER_PRESSED_COLOR = Color.YELLOW;
     private static final int DEFAULT_OUTER_PRESSED_COLOR = Color.BLUE;
 
     private float mInnerCircleRadius = DEFAULT_INNER_CIRCLE_RADIUS;   //内圆半径(初始)

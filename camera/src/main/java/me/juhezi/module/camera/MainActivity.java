@@ -3,22 +3,29 @@ package me.juhezi.module.camera;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.WindowManager;
 
 import com.juhezi.module.router_annotation.annotation.Register;
-
-import me.juhezi.module.base.widget.CameraButton;
-import me.juhezi.module.base.widget.MultiSegmentProgressBar;
+import com.weibo.movieeffect.liveengine.display.GLTextureView;
+import com.weibo.story.core.CameraMicCallback;
 
 @Register
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
-    private long maxTime = 5000;
-    private long usedTime = 0;  //已经使用的时间
+    private static final boolean DEFAULT_FLASH_ENABLE = false;
+
+    private GLTextureView mTvPreview;
+    private VideoCaptureController mVideoCaptureController;
+
+    private Boolean mFlashEnable = DEFAULT_FLASH_ENABLE;
+
+    private static Handler mUiHandler = new Handler(Looper.getMainLooper());
 
     @TargetApi(Build.VERSION_CODES.N)
     @Override
@@ -26,38 +33,59 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);   //设置全屏
         setContentView(R.layout.activity_main);
-        final MultiSegmentProgressBar mProgressBar = (MultiSegmentProgressBar) findViewById(R.id.mspb_test);
-        final CameraButton cameraButton = (CameraButton) findViewById(R.id.cb_test);
-        cameraButton.setClickMaxTime(maxTime);
-        cameraButton.setOnSingleClickListener(new CameraButton.OnSingleClickListener() {
-            @Override
-            public void onClick() {
-                Log.i(TAG, "onSingleClick: ");
-            }
-        });
-        cameraButton.setOnLongClickListener(new CameraButton.OnLongClickListener() {
-            @Override
-            public void onStartLongClick() {
-                mProgressBar.newSegmentProgress();
-            }
-
-            @Override
-            public void onEndLongClick() {
-                mProgressBar.done();
-            }
-
-            @Override
-            public void onCancelLongClick() {
-                mProgressBar.cancel();
-            }
-        });
-        cameraButton.setOnZoomListener(new CameraButton.OnZoomListener() {
-            @Override
-            public void onZoom(float scale) {
-            }
-        });
-
+        initView();
+        initEvent();
+        mVideoCaptureController = new VideoCaptureController(this, mTvPreview);
+        mVideoCaptureController.setCameraMicCallback(mPreviewStartListener);
     }
+
+    private void initView() {
+        mTvPreview = (GLTextureView) findViewById(R.id.tv_video_capture_preview);
+    }
+
+    private void initEvent() {
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mVideoCaptureController.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mVideoCaptureController.onPause();
+    }
+
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    private CameraMicCallback mPreviewStartListener = new CameraMicCallback() {
+        @Override
+        public void onCameraOpenDone() {
+            mUiHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    // TODO: 2017/10/27 Deal Flash Icon
+                    Log.i(TAG, "run: Hello");
+                }
+            });
+        }
+
+        @Override
+        public void onOpenCameraFailed() {
+
+        }
+
+        @Override
+        public void onOpenMicFailed() {
+
+        }
+    };
 
 }
 

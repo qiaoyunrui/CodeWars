@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="me.juhezi.module.camera">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:name=".CameraApplication"
         android:allowBackup="true"
