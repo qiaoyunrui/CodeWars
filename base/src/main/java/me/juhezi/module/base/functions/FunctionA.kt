@@ -1,5 +1,6 @@
 package me.juhezi.module.base.functions
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.telephony.TelephonyManager
@@ -33,6 +34,7 @@ fun logd(message: String) {
     }
 }
 
+@SuppressLint("MissingPermission")
 fun getIMEI(): String {
     var telManager = BaseApplication.getInstance()
             .getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager

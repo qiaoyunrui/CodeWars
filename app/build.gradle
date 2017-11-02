@@ -1,10 +1,8 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 def mApplicationId = "me.juhezi.codewars"
-def mBateApplicationId = "me.juhezi.bate.codewars"
 def app_name_release = "CodeWars"
 def debug_suffix = "debug"
-def mCommonFlavorDimension = "common"
 
 static def currentSecond() {
     return new Date().format("ss", TimeZone.getTimeZone("GMT+8"))
@@ -51,23 +49,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             resValue("string", "app_name", app_name_release)
             //preview->>
-            /*applicationVariants.all { variant ->
+            applicationVariants.all { variant ->
                 if (variant.buildType.name == 'release') {
                     variant.outputs.all {
                         if (outputFileName != null && outputFileName.endsWith('.apk')) {
                             def fileName = "${app_name_release}_v${defaultConfig.versionName}_${currentTime()}_${variant.flavorName}.apk"
                             outputFileName = fileName
-                        }
-                    }
-                }
-            }*/
-            if (project.hasProperty("KEYSTORE_PASS")) {
-                applicationVariants.all { variant ->
-                    variant.outputs.each { output ->
-                        def outputFile = output.outputFile
-                        if (outputFile != null && outputFile.name.endsWith('.apk')) {
-                            def fileName = "${app_name_release}_v${defaultConfig.versionName}_${currentTime()}_${variant.flavorName}.apk"
-                            output.outputFile = new File(outputFile.parent, fileName)
                         }
                     }
                 }
@@ -81,22 +68,6 @@ android {
             resValue("string", "app_name", "${app_name_release}_${debug_suffix}_${currentSecond()}")
         }
 
-        flavorDimensions mCommonFlavorDimension
-
-        productFlavors {
-            codewars {
-                dimension mCommonFlavorDimension
-                applicationId mApplicationId
-                versionCode VERSION_CODE as int
-                versionName VERSION_NAME
-            }
-            codewars_bate {
-                dimension mCommonFlavorDimension
-                applicationId mBateApplicationId
-                versionCode VERSION_CODE as int
-                versionName VERSION_NAME
-            }
-        }
     }
     repositories {
         mavenCentral()
@@ -104,28 +75,27 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
-    compile "com.android.support:support-v4:$rootProject.ext.supportLibVersion"
-    compile "com.android.support:support-annotations:$rootProject.ext.supportLibVersion"
-    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
-    compile "com.android.support:recyclerview-v7:$rootProject.ext.supportLibVersion"
-    compile "com.android.support:cardview-v7:$rootProject.ext.supportLibVersion"
-    compile "com.android.support:design:$rootProject.ext.supportLibVersion"
+    implementation "com.android.support:support-v4:$rootProject.ext.supportLibVersion"
+    implementation "com.android.support:support-annotations:$rootProject.ext.supportLibVersion"
+    implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportLibVersion"
+    implementation "com.android.support:cardview-v7:$rootProject.ext.supportLibVersion"
+    implementation "com.android.support:design:$rootProject.ext.supportLibVersion"
     // compile "com.android.support:multidex:$rootProject.ext.multidexVersion"
-    testCompile "junit:junit:$rootProject.ext.junitVersion"
+
+    //test
+    testImplementation "junit:junit:$rootProject.ext.junitVersion"
 
     //module
-    compile project(':base')
+    implementation project(':base')
+
+    if (!cameraSingle.toBoolean()) { // Application
+        implementation project(':camera')
+    }
 
     //Router
     annotationProcessor project(':router-compiler')
-    compile project(':router-api')
-
-    if (!cameraSingle.toBoolean()) { // Application
-        compile project(':camera')
-    }
 }

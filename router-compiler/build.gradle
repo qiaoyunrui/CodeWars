@@ -1,14 +1,13 @@
 //preview->>
-//apply plugin: 'java-library'
-apply plugin: 'java'
+apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':router-annotation')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':router-annotation')
     // AutoService
-    compile "com.google.auto.service:auto-service:$rootProject.ext.autoServiceVersion"
-    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
+    implementation "com.google.auto.service:auto-service:$rootProject.ext.autoServiceVersion"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
 }
 
 sourceCompatibility = JavaVersion.VERSION_1_7

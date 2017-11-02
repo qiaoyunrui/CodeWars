@@ -104,7 +104,7 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="4dp"
-            android:layout_toLeftOf="@+id/iv_video_capture_action"
+            android:layout_toStartOf="@id/iv_video_capture_action"
             android:scaleType="center"
             android:src="@android:color/holo_purple" />
 

@@ -3,6 +3,7 @@ package me.juhezi.codewars.view
 import android.annotation.TargetApi
 import android.os.Build
 import android.widget.Button
+import com.juhezi.module.router_annotation.annotation.Register
 import me.juhezi.codewars.R
 import me.juhezi.module.base.BaseActivity
 import me.juhezi.module.base.knife.bindView
