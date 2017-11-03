@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 //apply plugin: 'kotlin-kapt'
 
 def mVersionCode = 1
@@ -29,10 +30,14 @@ android {
         }
 
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
-    api fileTree(dir: 'libs', include: ['*.jar'])
+    api fileTree(include: ['*.jar'], dir: 'libs')
     androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -40,11 +45,9 @@ dependencies {
     api "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
     api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
     // compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-
     // Module
     annotationProcessor project(':router-compiler')
     api project(':router-api')
-
     // ButterKnife
     api "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"

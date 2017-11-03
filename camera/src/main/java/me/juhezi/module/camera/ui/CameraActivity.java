@@ -1,4 +1,4 @@
-package me.juhezi.module.camera;
+package me.juhezi.module.camera.ui;
 
 import android.annotation.TargetApi;
 import android.os.Build;
@@ -9,19 +9,16 @@ import android.view.WindowManager;
 import com.juhezi.module.router_annotation.annotation.Register;
 
 @Register
-public class MainActivity extends AppCompatActivity {
+public class CameraActivity extends AppCompatActivity {
 
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "CameraActivity";
 
     @TargetApi(Build.VERSION_CODES.N)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);   //设置全屏
-        setContentView(R.layout.activity_main);
+        setContentView(me.juhezi.module.camera.R.layout.activity_camera);     //这里要注意一定要指定对应的包名
     }
 
 }
-
-//通过外界来显示进度条
-//mProgressBar.update(cameraButton.getDistanceTime() / (float) maxTime);

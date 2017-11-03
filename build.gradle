@@ -2,12 +2,12 @@
 
 ext {
     // Module Single
-    cameraSingle = true
+    cameraSingle = false
 
     // framework
     androidCompileSdkVersion = 26
     androidBuildToolsVersion = '26.0.2'
-    supportLibVersion = '25.3.1'
+    supportLibVersion = '27.0.0'
     minSdkVersion = 20
     targetSdkVersion = 26
     //test
@@ -20,6 +20,7 @@ ext {
     conditionWatcherVersion = '0.1'
     // official
     constraintLayoutVersion = '1.0.2'
+    multidexVersion = '1.0.2'
     // third-party
     butterKnifeVersion = '8.6.0'
     autoServiceVersion = '1.0-rc3'

@@ -4,12 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
-    tools:context="me.juhezi.module.camera.MainActivity">
-
-    <com.weibo.movieeffect.liveengine.display.GLTextureView
-        android:id="@+id/tv_video_capture_preview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+    tools:context="me.juhezi.module.camera.ui.CameraActivity">
 
     <me.juhezi.module.base.widget.MultiSegmentProgressBar
         android:layout_width="match_parent"
@@ -119,7 +114,4 @@
 
     </RelativeLayout>
 
-</FrameLayout><!--
-android:id="@+id/cb_test"
-android:id="@+id/mspb_test"
--->
+</FrameLayout>

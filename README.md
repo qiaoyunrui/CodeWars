@@ -12,7 +12,7 @@ Travis CI|![icon](https://travis-ci.org/qiaoyunrui/CodeWars.svg?branch=master)
 ### For Java
 
 * Router
-    - [x] Activity [with Test]
+    - [x] Activity [with Test] [Need Update]
     - [ ] Service
     - [ ] Broadcast
     - [ ] ContentProvider
@@ -39,6 +39,10 @@ Travis CI|![icon](https://travis-ci.org/qiaoyunrui/CodeWars.svg?branch=master)
 #### Widgets
 
 - [x] GradientText [with Test]
+
+- [x] CameraButton [With Test]
+
+- [x] MultiSegmentProgressBar [With Test]
 
 #### Other
 
@@ -67,5 +71,16 @@ Travis CI|![icon](https://travis-ci.org/qiaoyunrui/CodeWars.svg?branch=master)
 * router-compiler
 
 * test
- 
+
+## Functions
+
+* GitHub
+
+* Travis
+
+* Docker
+
+* Bash
+
+* Codewars
 

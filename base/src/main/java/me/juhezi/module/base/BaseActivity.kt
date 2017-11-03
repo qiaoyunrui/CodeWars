@@ -1,7 +1,6 @@
 package me.juhezi.module.base
 
 import android.os.Bundle
-import android.support.annotation.IntDef
 import android.support.annotation.LayoutRes
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -9,8 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
-import butterknife.ButterKnife
-import butterknife.Unbinder
 
 /**
  * Created by Juhezi[juhezix@163.com] on 2017/8/3.
@@ -61,8 +58,8 @@ open class BaseActivity : AppCompatActivity() {
     private fun initBaseData() {
         super.setContentView(mRootViewResId)
         mRootView = findViewById(R.id.vg_base_activity_root)
-        mContainer = findViewById(R.id.vg_base_activity_container) as FrameLayout?
-        mToolbar = findViewById(R.id.tb_base_activity) as Toolbar?
+        mContainer = findViewById(R.id.vg_base_activity_container)
+        mToolbar = findViewById(R.id.tb_base_activity)
         if (supportActionBar == null) {
             setSupportActionBar(mToolbar)
         }

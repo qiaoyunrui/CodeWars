@@ -23,7 +23,7 @@ public class MainApplication extends BaseApplication {
      * 路由注册
      */
     private void routerRegist() {
-        Repository.register("me.juhezi.module.camera.MainActivity");
+        Repository.register("me.juhezi.module.camera.ui.CameraActivity");
     }
 
 }

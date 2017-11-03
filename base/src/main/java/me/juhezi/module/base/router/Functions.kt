@@ -1,9 +1,7 @@
 package me.juhezi.module.base.router
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import me.juhezi.module.base.router.activity.turn
 
 /**
  * Created by Juhezi on 2017/8/17.

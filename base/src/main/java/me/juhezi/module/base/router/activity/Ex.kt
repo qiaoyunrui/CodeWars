@@ -14,7 +14,14 @@ fun Activity.turn(key: String, action: Intent.() -> Unit = {}) = startActivity(b
 fun Activity.turnForResult(key: String, requestCode: Int, action: Intent.() -> Unit = {}) =
         startActivityForResult(buildIntent(this, key, action), requestCode)
 
-fun Fragment.turn(key: String, action: Intent.() -> Unit = {}) = startActivity(buildIntent(context, key, action))
+fun Fragment.turn(key: String, action: Intent.() -> Unit = {}) {
+    if (context != null) {
+        startActivity(buildIntent(context!!, key, action))
+    }
+}
 
-fun Fragment.turnForResult(key: String, requestCode: Int, action: Intent.() -> Unit = {}) =
-        startActivityForResult(buildIntent(context, key, action), requestCode)
+fun Fragment.turnForResult(key: String, requestCode: Int, action: Intent.() -> Unit = {}) {
+    if (context != null) {
+        startActivityForResult(buildIntent(context!!, key, action), requestCode)
+    }
+}
