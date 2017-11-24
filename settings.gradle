@@ -1,1 +1,4 @@
-include ':app', ':base', ':router-compiler', ':router-annotation', ':test', ':router-api', ':camera'
+include ':app', ':base', ':test', ':camera'
+include ':router:router-compiler'
+include ':router:router-annotation'
+include ':router:router-api'

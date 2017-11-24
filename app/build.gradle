@@ -95,5 +95,5 @@ dependencies {
     }
 
     //Router
-    annotationProcessor project(':router-compiler')
+    annotationProcessor project(':router:router-compiler')
 }

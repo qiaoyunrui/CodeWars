@@ -55,6 +55,6 @@ dependencies {
     implementation project(':base')
 
     // router
-    annotationProcessor project(':router-compiler')
+    annotationProcessor project(':router:router-compiler')
     // third part
 }
