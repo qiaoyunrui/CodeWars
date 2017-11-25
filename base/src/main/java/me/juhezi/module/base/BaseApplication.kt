@@ -2,8 +2,6 @@ package me.juhezi.module.base
 
 import android.app.Application
 
-import com.juhezi.module.router_annotation.annotation.Proxy
-
 import me.juhezi.module.base.router.BaseRouterProxy
 import me.juhezi.module.router_api.Router
 

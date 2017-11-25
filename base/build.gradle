@@ -45,9 +45,10 @@ dependencies {
     api "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
     api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
     // compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
+
     // Module
-    annotationProcessor project(':router:router-compiler')
-    api project(':router:router-api')
+    api project(":router-api")
+
     // ButterKnife
     api "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
