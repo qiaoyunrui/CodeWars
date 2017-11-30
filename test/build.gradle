@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'realm-android'
 //apply plugin: 'kotlin-kapt'
-
 
 def mApplicationId = "me.juhezi.codewars.test"
 
@@ -18,6 +18,10 @@ android {
         versionName VERSION_NAME
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+}
+
+realm {
+    syncEnabled = true
 }
 
 dependencies {
