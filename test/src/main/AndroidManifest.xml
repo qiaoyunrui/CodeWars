@@ -2,6 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.juhezi.test">
 
+    <!--保持屏幕常亮-->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:name=".TestApplication"
         android:allowBackup="true"
@@ -11,14 +14,14 @@
         android:supportsRtl="true"
         android:theme="@style/BaseAppTheme"
         tools:replace="android:theme">
-        <activity android:name=".TestActivity">
+        <activity android:name=".VideoActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".HelloActivity" />
+        <!--<activity android:name=".HelloActivity" />-->
         <activity android:name=".IMMActivity" />
     </application>
 </manifest>
