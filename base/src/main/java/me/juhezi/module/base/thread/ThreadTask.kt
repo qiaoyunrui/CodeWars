@@ -4,13 +4,14 @@ import android.os.Handler
 import android.os.HandlerThread
 import android.os.Looper
 import android.os.Message
+import me.juhezi.module.base.utils.Dict
 
 abstract class ThreadTask {
 
     private val mHandlerThread: HandlerThread = HandlerThread("ThreadTask", android.os.Process.THREAD_PRIORITY_BACKGROUND)
     private val mHandler: TaskHandler
     private val mUiHandler: TaskHandler
-    private var mParams: Map<String, Any>? = null
+    private var mParams: Dict? = null
     @get:Synchronized
     var isRunning = true
         private set
@@ -31,15 +32,15 @@ abstract class ThreadTask {
         mUiHandler = TaskHandler(Looper.getMainLooper())
     }
 
-    protected abstract fun doInBackground(params: Map<String, Any>?): Any
+    protected abstract fun doInBackground(params: Dict?): Any
 
     protected fun onPreExecute() = Unit
 
-    @Synchronized protected fun onProgressUpdate(grogresses: Map<String, Any>?) = Unit
+    @Synchronized protected fun onProgressUpdate(grogresses: Dict?) = Unit
 
     @Synchronized protected fun onPostExecute(result: Any) = Unit
 
-    protected fun publishProgress(progresses: Map<String, Any>) {
+    protected fun publishProgress(progresses: Dict?) {
         mUiHandler.obtainMessage(MESSAGE_PROGRESS, progresses).sendToTarget()
     }
 
@@ -49,7 +50,7 @@ abstract class ThreadTask {
         mHandlerThread.quit()
     }
 
-    fun execute(params: Map<String, Any>?) {
+    fun execute(params: Dict?) {
         isRunning = true
         mParams = params
         onPreExecute()
@@ -72,8 +73,9 @@ abstract class ThreadTask {
                     mHandlerThread.quit()
                 }
                 MESSAGE_PROGRESS -> {
-                    if (msg.obj is Map<*, *>) {
-                        onProgressUpdate(msg.obj as Map<String, Any>?)
+                    val data = msg.obj
+                    if (data is Dict) {
+                        onProgressUpdate(data)
                     } else {
                         onProgressUpdate(null)
                     }
