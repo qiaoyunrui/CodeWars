@@ -4,7 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.widget.ImageView;
 
-import com.example.juhezi.test.R;
 import com.juhezi.module.router_annotation.annotation.Register;
 
 import me.juhezi.module.base.BaseActivity;

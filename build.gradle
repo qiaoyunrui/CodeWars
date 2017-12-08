@@ -2,7 +2,7 @@
 
 ext {
     // Module Single
-    cameraSingle = false
+    cameraSingle = true
 
     // framework
     androidCompileSdkVersion = 26
@@ -50,6 +50,9 @@ allprojects {
     repositories {
         jcenter()
         google()
+        flatDir {
+            dirs new File(project.project(':base').getProjectDir(), 'aar')
+        }
     }
 }
 

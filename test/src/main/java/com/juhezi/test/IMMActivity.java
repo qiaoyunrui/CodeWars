@@ -5,7 +5,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.example.juhezi.test.R;
 import com.juhezi.module.router_annotation.annotation.Register;
 
 import butterknife.BindView;

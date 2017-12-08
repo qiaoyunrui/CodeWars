@@ -4,8 +4,6 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.widget.Button
-import com.example.juhezi.test.R
-
 import me.juhezi.module.base.BaseActivity
 import me.juhezi.module.base.knife.bindView
 import me.juhezi.module.base.router.Repository

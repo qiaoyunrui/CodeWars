@@ -47,7 +47,9 @@ dependencies {
     // compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
 
     // Module
-    api project(":router-api")
+//    api project(":router-api")
+//    api 'me.juhezi.module:router_api:0.1@aar'
+    api name: 'router-api', ext: 'aar'
 
     // ButterKnife
     api "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
