@@ -82,6 +82,9 @@ fun Context.getAppVersionName() = try {
     ""
 }
 
+/*
+<uses-feature android:name="android.hardware.camera" android:required="false" />
+ */
 fun Context.checkCameraHardware()
         = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
 

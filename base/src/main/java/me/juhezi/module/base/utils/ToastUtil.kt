@@ -1,9 +1,8 @@
 package me.juhezi.module.base.utils
 
-import android.support.annotation.MainThread
 import android.widget.Toast
 import me.juhezi.module.base.BaseApplication
-import me.juhezi.module.base.functions.runInUIThread
+import me.juhezi.module.base.runInUIThread
 
 /**
  * Show Short Toast

@@ -1,12 +1,10 @@
-package me.juhezi.module.base.functions
+package me.juhezi.module.base
 
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Handler
 import android.telephony.TelephonyManager
 import android.util.Log
-import me.juhezi.module.base.BaseApplication
-import me.juhezi.module.base.BuildConfig
 import me.juhezi.module.base.builder.buildUIHandler
 import me.juhezi.module.base.extensions.getAppVersion
 import me.juhezi.module.base.extensions.getAppVersionName
@@ -34,7 +32,7 @@ fun logd(message: String) {
     }
 }
 
-@SuppressLint("MissingPermission")
+@SuppressLint("MissingPermission", "HardwareIds")
 fun getIMEI(): String {
     var telManager = BaseApplication.getInstance()
             .getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager

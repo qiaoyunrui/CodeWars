@@ -2,8 +2,7 @@ package me.juhezi.module.base.extensions
 
 import android.text.TextUtils
 import android.util.Log
-import me.juhezi.module.base.BuildConfig
-import me.juhezi.module.base.functions.isDebug
+import me.juhezi.module.base.isDebug
 
 //import kotlin.reflect.KProperty1
 //import kotlin.reflect.full.memberProperties
