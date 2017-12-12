@@ -81,3 +81,8 @@ fun Context.getAppVersionName() = try {
     e.printStackTrace()
     ""
 }
+
+fun Context.checkCameraHardware()
+        = packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA)
+
+
