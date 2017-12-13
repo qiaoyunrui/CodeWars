@@ -1,1 +1,1 @@
-include ':app', ':base', ':task'
+include ':app', ':base', ':task', ':ding'
