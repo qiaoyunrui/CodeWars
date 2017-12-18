@@ -1,5 +1,6 @@
 package me.juhezi.ding
 
+import android.app.Activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 
