@@ -2,4 +2,6 @@
     <string name="app_name">base</string>
     <string name="_404">404</string>
     <string name="page_not_found">你要访问的页面找不到了</string>
+
+    <string name="search">搜索</string>
 </resources>

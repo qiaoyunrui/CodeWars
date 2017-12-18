@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/tool_bar_height"
+    android:background="@color/colorPrimary"
+    app:contentInsetEnd="0dp"
+    app:contentInsetStart="0dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ViewStub
+            android:id="@+id/vs_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp" />
+
+        <RelativeLayout
+            android:id="@+id/vg_appbar_nav_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:contentDescription="左边操作栏">
+
+            <ImageView
+                android:id="@+id/iv_appbar_nav_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_margin="@dimen/default_margin"
+                android:src="@drawable/ic_arrow_back"
+                android:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/iv_new_msg"
+                android:layout_width="11dp"
+                android:layout_height="11dp"
+                android:layout_alignRight="@id/iv_appbar_nav_button"
+                android:layout_alignTop="@id/iv_appbar_nav_button"
+                android:src="@drawable/ic_message_red_point"
+                android:visibility="visible" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_appbar_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:contentDescription="标题"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:singleLine="true"
+            android:textColor="@color/appbar_text_color"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <RelativeLayout
+            android:id="@+id/vg_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/vg_appbar_nav_button"
+            android:contentDescription="搜索栏"
+            android:paddingBottom="7dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="7dp"
+            android:visibility="visible">
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:hint="@string/search"
+                android:paddingLeft="32dp"
+                android:singleLine="true"
+                android:textColor="@color/text_primary_color"
+                android:textColorHint="@color/text_primary_color"
+                android:textCursorDrawable="@null"
+                android:textSize="@dimen/text_size_12" />
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/ic_appbar_search_small" />
+
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/iv_appbar_action_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/iv_appbar_action_button_x"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/iv_appbar_action_button"
+            android:paddingLeft="14dp"
+            android:paddingRight="14dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tv_appbar_action"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:gravity="center"
+            android:paddingLeft="15dp"
+            android:paddingRight="15dp"
+            android:textColor="@drawable/appbar_text"
+            android:textSize="16dp"
+            android:visibility="gone" />
+
+
+    </RelativeLayout>
+
+</android.support.v7.widget.Toolbar>
