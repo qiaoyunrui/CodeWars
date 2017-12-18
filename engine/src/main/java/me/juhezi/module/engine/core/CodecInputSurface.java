@@ -8,8 +8,18 @@ import android.opengl.EGLExt;
 import android.opengl.EGLSurface;
 import android.view.Surface;
 
+
 /**
+ * Holds state associated with a Surface used for MediaCodec encoder input.
+ * <p>
+ * The constructor takes a Surface obtained from MediaCodec.createInputSurface(), and uses that
+ * to create an EGL window surface.  Calls to eglSwapBuffers() cause a frame of data to be sent
+ * to the video encoder.
+ * <p>
+ * This object owns the Surface -- releasing this will release the Surface too.
+ *
  * 代理EGL的一些相关操作
+ *
  * Created by Juhezi[juhezix@163.com] on 2017/12/18.
  */
 public class CodecInputSurface {
