@@ -44,3 +44,10 @@ fun getVersionName() =
 
 fun getVersionCode() =
         BaseApplication.getInstance().getAppVersion()
+
+inline fun log(tag: String, enable: Boolean = true): (String) -> Unit
+        = { message: String ->
+    if (enable) {
+        Log.i(tag, message)
+    }
+}

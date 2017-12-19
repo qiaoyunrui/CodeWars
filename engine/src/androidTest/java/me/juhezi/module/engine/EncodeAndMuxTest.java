@@ -23,7 +23,8 @@ package me.juhezi.module.engine;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+// 使用OpenGL ES生成一个视频，通过 MediaCodec 使用H.264进行编码，
+// 而且通过 MediaMuxer 将流转换成一个.MP4文件
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaFormat;

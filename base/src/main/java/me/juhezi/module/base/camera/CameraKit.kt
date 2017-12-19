@@ -10,6 +10,57 @@ import me.juhezi.module.base.extensions.e
  */
 class CameraKit(var mHolder: SurfaceHolder) {
 
+    companion object {
+        private val TAG = "CameraKit"
+        private val LOG = false //是否打印日志
+        private val log = me.juhezi.module.base.log(TAG, LOG)
+
+        val DEFAULT_CAMERA_ID = Camera.CameraInfo.CAMERA_FACING_BACK
+
+        //---  functions ---
+
+        fun getCameraInstance(cameraId: Int = DEFAULT_CAMERA_ID): Camera? {
+            var camera: Camera? = null
+            try {
+                camera = Camera.open(cameraId)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            return camera
+        }
+
+        /**
+         * 根据提供的尺寸，选取预览尺寸
+         */
+        @JvmStatic
+        fun choosePreviewSize(params: Camera.Parameters, size: Pair<Int, Int>? = null): Pair<Int, Int> {
+            val ppsfv = params.preferredPreviewSizeForVideo
+            fun setAndReturnPreferredSize(): Pair<Int, Int> {
+                return if (ppsfv != null) {
+                    params.setPreviewSize(ppsfv.width, ppsfv.height)
+                    Pair(ppsfv.width, ppsfv.height)
+                } else {
+                    Pair(0, 0)
+                }
+            }
+            if (ppsfv != null)
+                log("Camera preferred preview size for video is ${ppsfv.width} x ${ppsfv.height}")
+
+            if (size == null) {
+                return setAndReturnPreferredSize()
+            }
+            params.supportedPreviewSizes.forEach {
+                if (it.width == size.first && it.height == size.second) {
+                    params.setPreviewSize(size.first, size.second)
+                    return size
+                }
+            }
+            log("Unable to set preview to ${size.first} x ${size.second}")
+            return setAndReturnPreferredSize()
+        }
+
+    }
+
     private var mCamera: Camera? = null
 
     init {
@@ -48,6 +99,28 @@ class CameraKit(var mHolder: SurfaceHolder) {
             }
 
         })
+    }
+
+    //--------------------------- New ------------------------
+    fun prepare(width: Int, height: Int) {
+        if (mCamera != null)
+            throw RuntimeException("camera already initialized")
+        val info = Camera.CameraInfo()
+        mCamera = getCameraInstance()
+        if (mCamera == null) {
+            throw RuntimeException("Unable to open camera")
+        }
+        val params = mCamera!!.parameters
+        val size = choosePreviewSize(params, Pair(width, height))
+        mCamera!!.parameters = params
+        log("Camera preview size is ${size.first} x ${size.second}")
+    }
+
+    fun release() {
+        log("releasing camera")
+        mCamera?.stopPreview()
+        mCamera?.release()
+        mCamera = null
     }
 
 }

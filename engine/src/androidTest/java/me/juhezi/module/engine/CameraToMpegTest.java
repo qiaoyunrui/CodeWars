@@ -16,7 +16,10 @@
  */
 
 package me.juhezi.module.engine;
- 
+
+// 通过相机预览录制视频并且编码成一个MP4文件，同样通过 MediaCodec 使用H.264进行编码，
+// 以及 MediaMuxer 将流转换成一个.MP4文件，作为一个扩展版，还通过GLES片段着色器在录制的时候改变视频
+
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.media.MediaCodec;
@@ -151,7 +154,7 @@ public class CameraToMpegTest extends AndroidTestCase {
         // arbitrary but popular values
         int encWidth = 640;
         int encHeight = 480;
-        int encBitRate = 6000000;      // Mbps
+        int encBitRate = 6000000;      // Mbps Million bits per second 兆比特每秒
         Log.d(TAG, MIME_TYPE + " output " + encWidth + "x" + encHeight + " @" + encBitRate);
  
         try {
