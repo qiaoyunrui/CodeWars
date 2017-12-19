@@ -92,8 +92,7 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="10dp"
-                android:src="@drawable/ic_appbar_search_small" />
+                android:layout_marginLeft="10dp" />
 
         </RelativeLayout>
 
@@ -123,7 +122,6 @@
             android:gravity="center"
             android:paddingLeft="15dp"
             android:paddingRight="15dp"
-            android:textColor="@drawable/appbar_text"
             android:textSize="16dp"
             android:visibility="gone" />
 
