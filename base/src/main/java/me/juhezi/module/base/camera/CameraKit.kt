@@ -13,9 +13,9 @@ class CameraKit(var mHolder: SurfaceHolder) {
     companion object {
         private val TAG = "CameraKit"
         private val LOG = false //是否打印日志
-        private val log = me.juhezi.module.base.log(TAG, LOG)
+        private val L = me.juhezi.module.base.log(TAG, LOG)
 
-        val DEFAULT_CAMERA_ID = Camera.CameraInfo.CAMERA_FACING_BACK
+        private val DEFAULT_CAMERA_ID = Camera.CameraInfo.CAMERA_FACING_BACK
 
         //---  functions ---
 
@@ -44,7 +44,7 @@ class CameraKit(var mHolder: SurfaceHolder) {
                 }
             }
             if (ppsfv != null)
-                log("Camera preferred preview size for video is ${ppsfv.width} x ${ppsfv.height}")
+                L("Camera preferred preview size for video is ${ppsfv.width} x ${ppsfv.height}")
 
             if (size == null) {
                 return setAndReturnPreferredSize()
@@ -55,7 +55,7 @@ class CameraKit(var mHolder: SurfaceHolder) {
                     return size
                 }
             }
-            log("Unable to set preview to ${size.first} x ${size.second}")
+            L("Unable to set preview to ${size.first} x ${size.second}")
             return setAndReturnPreferredSize()
         }
 
@@ -113,11 +113,11 @@ class CameraKit(var mHolder: SurfaceHolder) {
         val params = mCamera!!.parameters
         val size = choosePreviewSize(params, Pair(width, height))
         mCamera!!.parameters = params
-        log("Camera preview size is ${size.first} x ${size.second}")
+        L("Camera preview size is ${size.first} x ${size.second}")
     }
 
     fun release() {
-        log("releasing camera")
+        L("releasing camera")
         mCamera?.stopPreview()
         mCamera?.release()
         mCamera = null

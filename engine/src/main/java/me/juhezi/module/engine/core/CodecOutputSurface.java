@@ -1,11 +1,21 @@
 package me.juhezi.module.engine.core;
 
+import android.graphics.Bitmap;
 import android.graphics.SurfaceTexture;
+import android.opengl.EGL14;
+import android.opengl.EGLConfig;
+import android.opengl.EGLContext;
+import android.opengl.EGLDisplay;
+import android.opengl.EGLSurface;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
 import android.opengl.Matrix;
 import android.util.Log;
+import android.view.Surface;
 
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
@@ -17,98 +27,234 @@ import me.juhezi.module.base.FunctionsKt;
 /**
  * Created by Juhezi[juhezix@163.com] on 2017/12/19.
  * <p>
- * Manages a SurfaceTexture.
- * Creates SurfaceTexture and TextureRender objects, and provides
- * functions that wait for frames and render them to the current EGL surface.
+ * Holds state associated[相关] with a Surface used for MediaCodec decoder output.
  * <p>
- * The SurfaceTexture can be passed to Camera.setPreviewTexture() to receive camera output.
+ * The constructor for this class will prepare GL, create a SurfaceTexture,
+ * and then create a Surface for that SurfaceTexture.  The Surface can be passed to
+ * MediaCodec.configure() to receive decoder output.  When a frame arrives, we latch the
+ * texture with updateTexImage(), then render the texture with GL to a pbuffer.
+ * <p>
+ * By default, the Surface will be using a BufferQueue in asynchronous mode, so we
+ * can potentially drop frames.
  */
-public class SurfaceTextureManager
-        implements SurfaceTexture.OnFrameAvailableListener {
+public class CodecOutputSurface implements SurfaceTexture.OnFrameAvailableListener {
 
-    private static final String TAG = "SurfaceTextureManager";
+    private static final String TAG = "CodecOutputSurface";
     private static final boolean LOG = true;
-    private static final Function1<String, Unit> L = FunctionsKt.log(TAG, LOG);    //调用 Kotlin 中的函数
+    private static final Function1<String, Unit> L = FunctionsKt.log(TAG, LOG);
 
-    private SurfaceTexture mSurfaceTexture;
     private STextureRender mTextureRender;
+    private SurfaceTexture mSurfaceTexture;
+    private Surface mSurface;
 
-    private final Object mFrameSynObject = new Object();  // guards mFrameAvailable
+    private EGLDisplay mEGLDisplay = EGL14.EGL_NO_DISPLAY;
+    private EGLContext mEGLContext = EGL14.EGL_NO_CONTEXT;
+    private EGLSurface mEGLSurface = EGL14.EGL_NO_SURFACE;
+    int mWidth;
+    int mHeight;
+
+    private Object mFrameSyncObject = new Object();     // guards mFrameAvailable
     private boolean mFrameAvailable;
 
+    private ByteBuffer mPixelBuffer;    //used by saveFrame()
 
     /**
-     * Creates instances of TextureRender and SurfaceTexture.
+     * Creates a CodecOutputSurface backed by a pbuffer with the specified dimensions.  The
+     * new EGL context and surface will be made current.  Creates a Surface that can be passed
+     * to MediaCodec.configure().
      */
-    public SurfaceTextureManager() {
-        mTextureRender = new STextureRender();
-        mTextureRender.surfaceCreated();
-        L.invoke("textureID = " + mTextureRender.getTextureId());
-        mSurfaceTexture.setOnFrameAvailableListener(this);
+    public CodecOutputSurface(int width, int height) {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException();
+        }
+        mWidth = width;
+        mHeight = height;
+
+        eglSetup();
+        makeCurrent();
+        setup();
     }
 
+    /**
+     * Prepares EGL. We want a GLES 2.0 context and a surface that supports pbuffer.
+     */
+    private void eglSetup() {
+        mEGLDisplay = EGL14.eglGetDisplay(EGL14.EGL_DEFAULT_DISPLAY);
+        if (mEGLDisplay == EGL14.EGL_NO_DISPLAY) {
+            throw new RuntimeException("unable to get EGL14 display.");
+        }
+        int[] version = new int[2];
+        if (!EGL14.eglInitialize(mEGLDisplay, version, 0,
+                version, 1)) {
+            mEGLDisplay = null;
+            throw new RuntimeException("Unable to initialize EGL14");
+        }
+
+        // Configure EGL for pbuffer and OpenGL ES 2.0, 24-bit RGB
+        int[] attribList = {
+                EGL14.EGL_RED_SIZE, 8,
+                EGL14.EGL_GREEN_SIZE, 8,
+                EGL14.EGL_BLUE_SIZE, 8,
+                EGL14.EGL_ALPHA_SIZE, 8,
+                EGL14.EGL_RENDERABLE_TYPE, EGL14.EGL_OPENGL_ES2_BIT,
+                EGL14.EGL_SURFACE_TYPE, EGL14.EGL_PBUFFER_BIT,
+                EGL14.EGL_NONE
+        };
+        EGLConfig[] configs = new EGLConfig[1];
+        int[] numConfigs = new int[1];
+        if (!EGL14.eglChooseConfig(mEGLDisplay, attribList, 0,
+                configs, 0,
+                configs.length, numConfigs, 0)) {
+            throw new RuntimeException("unable to find RGB888+recordable ES2 EGL config");
+        }
+
+        // Configure context for OpenGL ES 2.0.
+        int[] attrib_list = {
+                EGL14.EGL_CONTEXT_CLIENT_VERSION, 2,
+                EGL14.EGL_NONE
+        };
+        mEGLContext = EGL14.eglCreateContext(mEGLDisplay, configs[0],
+                EGL14.EGL_NO_CONTEXT, attrib_list, 0);
+        checkEglError("eglCreateContext");
+        if (mEGLContext == null) {
+            throw new RuntimeException("null context");
+        }
+
+        // Create a pbuffer surface.
+        int[] surfaceAttribs = {
+                EGL14.EGL_WIDTH, mWidth,
+                EGL14.EGL_HEIGHT, mHeight,
+                EGL14.EGL_NONE
+        };
+        mEGLSurface = EGL14.eglCreatePbufferSurface(mEGLDisplay, configs[0],
+                surfaceAttribs, 0);
+        if (mEGLSurface == null) {
+            throw new RuntimeException("surface was null");
+        }
+    }
+
+    /**
+     * Makes our EGL context and surface current.
+     */
+    public void makeCurrent() {
+        if (!EGL14.eglMakeCurrent(mEGLDisplay, mEGLSurface, mEGLSurface, mEGLContext)) {
+            throw new RuntimeException("eglMakeCurrent failed");
+        }
+    }
+
+    private void setup() {
+        mTextureRender = new STextureRender();
+        mTextureRender.surfaceCreated();
+
+        L.invoke("textureID = " + mTextureRender.getTextureId());
+        mSurfaceTexture = new SurfaceTexture(mTextureRender.getTextureId());
+
+        mSurfaceTexture.setOnFrameAvailableListener(this);
+
+        mSurface = new Surface(mSurfaceTexture);
+
+        mPixelBuffer = ByteBuffer.allocateDirect(mWidth * mHeight * 4);
+        mPixelBuffer.order(ByteOrder.LITTLE_ENDIAN);
+    }
+
+    /**
+     * Discard all resources held by this class, notably[特别是]
+     */
     public void release() {
-        // this causes a bunch of warnings that appear harmless but might confuse someone:
-        //  W BufferQueue: [unnamed-3997-2] cancelBuffer: BufferQueue has been abandoned!
-        //mSurfaceTexture.release();
+        if (mEGLDisplay != EGL14.EGL_NO_DISPLAY) {
+            EGL14.eglDestroySurface(mEGLDisplay, mEGLSurface);
+            EGL14.eglDestroyContext(mEGLDisplay, mEGLContext);
+            EGL14.eglReleaseThread();
+            EGL14.eglTerminate(mEGLDisplay);
+        }
+        mEGLDisplay = EGL14.EGL_NO_DISPLAY;
+        mEGLContext = EGL14.EGL_NO_CONTEXT;
+        mEGLSurface = EGL14.EGL_NO_SURFACE;
+
+        mSurface.release();
+
         mTextureRender = null;
+        mSurface = null;
         mSurfaceTexture = null;
     }
 
-    public SurfaceTexture getSurfaceTexture() {
-        return mSurfaceTexture;
+    public Surface getSurface() {
+        return mSurface;
     }
 
-    /**
-     * Replaces the fragment shader
-     *
-     * @param fragmentShader
-     */
-    public void changeFragmentShader(String fragmentShader) {
-        mTextureRender.changeFragmentShader(fragmentShader);
-    }
-
-    /**
-     * Latches[锁上] the next buffer into the texture.
-     * Must be called from the thread created the OutputSurface object
-     */
     public void awaitNewImage() {
         final int TIMEOUT_MS = 2500;
-        synchronized (mFrameSynObject) {
+
+        synchronized (mFrameSyncObject) {
             while (!mFrameAvailable) {
                 try {
-                    mFrameSynObject.wait(TIMEOUT_MS);   //等待期间会一直卡在这里
+                    mFrameSyncObject.wait(TIMEOUT_MS);
                     if (!mFrameAvailable) {
-                        throw new RuntimeException("Camera Frame wait timed out.");
+                        throw new RuntimeException("frame wait timed out");
                     }
                 } catch (InterruptedException e) {
-                    throw new RuntimeException();
+                    throw new RuntimeException(e);
                 }
             }
             mFrameAvailable = false;
         }
 
+        // Latch the data.
         mTextureRender.checkGlError("before updateTexImage");
-        //Update the texture image to the most recent frame from the image stream
         mSurfaceTexture.updateTexImage();
     }
 
     /**
-     * Draws the data from SurfaceTexture onto the current EGL surface
+     * Draws the data from SurfaceTexture onto the current EGL surface.
+     *
+     * @param invert if set, render the image with Y inverted (0,0 in top left)
      */
-    public void drawImage() {
-        mTextureRender.drawFrame(mSurfaceTexture);
+    public void drawImage(boolean invert) {
+        mTextureRender.drawFrame(mSurfaceTexture, invert);
     }
 
     @Override
     public void onFrameAvailable(SurfaceTexture surfaceTexture) {
         L.invoke("new frame available");
-        synchronized (mFrameSynObject) {
+        synchronized (mFrameSyncObject) {
             if (mFrameAvailable) {
                 throw new RuntimeException("mFrameAvailable already set, frame could be dropped");
             }
             mFrameAvailable = true;
-            mFrameSynObject.notifyAll();
+            mFrameSyncObject.notifyAll();
+        }
+    }
+
+    /**
+     * Saves the current frame to disk a PNG image.
+     *
+     * @param fileName
+     * @throws IOException
+     */
+    public void saveFrame(String fileName) throws IOException {
+        mPixelBuffer.rewind();
+        GLES20.glReadPixels(0, 0,
+                mWidth, mHeight,
+                GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE,
+                mPixelBuffer);
+        BufferedOutputStream bos = null;
+        try {
+            bos = new BufferedOutputStream(new FileOutputStream(fileName));
+            Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+            mPixelBuffer.rewind();
+            bitmap.copyPixelsFromBuffer(mPixelBuffer);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 90, bos);
+            bitmap.recycle();
+        } finally {
+            if (bos != null) bos.close();
+        }
+        L.invoke("Saved " + mWidth + "x" + mHeight + " frame as '" + fileName + "'");
+    }
+
+    private void checkEglError(String message) {
+        int error;
+        if ((error = EGL14.eglGetError()) != EGL14.EGL_SUCCESS) {
+            throw new RuntimeException(message + ": EGL error 0x" + Integer.toHexString(error));
         }
     }
 
@@ -173,13 +319,20 @@ public class SurfaceTextureManager
             return mTextureID;
         }
 
-        public void drawFrame(SurfaceTexture st) {
+        /**
+         * Draws the external texture in SurfaceTexture onto the current EGL surface.
+         */
+        public void drawFrame(SurfaceTexture st, boolean invert) {
             checkGlError("onDrawFrame start");
             st.getTransformMatrix(mSTMatrix);
+            if (invert) {
+                mSTMatrix[5] = -mSTMatrix[5];
+                mSTMatrix[13] = 1.0f - mSTMatrix[13];
+            }
 
             // (optional) clear to green so we can see if we're failing to set pixels
             GLES20.glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
-            GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+            GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
             GLES20.glUseProgram(mProgram);
             checkGlError("glUseProgram");
@@ -208,10 +361,6 @@ public class SurfaceTextureManager
             GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, 0, 4);
             checkGlError("glDrawArrays");
 
-            // IMPORTANT: on some devices, if you are sharing the external texture between two
-            // contexts, one context may not see updates to the texture unless you un-bind and
-            // re-bind it.  If you're not using shared EGL contexts, you don't need to bind
-            // texture 0 here.
             GLES20.glBindTexture(GLES11Ext.GL_TEXTURE_EXTERNAL_OES, 0);
         }
 
@@ -223,6 +372,7 @@ public class SurfaceTextureManager
             if (mProgram == 0) {
                 throw new RuntimeException("failed creating program");
             }
+
             maPositionHandle = GLES20.glGetAttribLocation(mProgram, "aPosition");
             checkLocation(maPositionHandle, "aPosition");
             maTextureHandle = GLES20.glGetAttribLocation(mProgram, "aTextureCoord");
