@@ -1,4 +1,4 @@
-package me.juhezi.module.base.camera
+package me.juhezi.module.engine.core.camera
 
 import android.hardware.Camera
 

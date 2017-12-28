@@ -864,7 +864,8 @@ public class CameraToMpegTest extends AndroidTestCase {
             checkLocation(muMVPMatrixHandle, "uMVPMatrix");
             muSTMatrixHandle = GLES20.glGetUniformLocation(mProgram, "uSTMatrix");
             checkLocation(muSTMatrixHandle, "uSTMatrix");
- 
+
+            //创建外部纹理
             int[] textures = new int[1];
             GLES20.glGenTextures(1, textures, 0);
  
