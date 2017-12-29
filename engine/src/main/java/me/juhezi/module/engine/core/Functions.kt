@@ -5,7 +5,10 @@ import android.media.MediaFormat
 import android.opengl.GLES20
 import android.opengl.GLES30
 import android.util.Log
+import java.nio.ByteBuffer
 import java.nio.ByteOrder
+import java.nio.FloatBuffer
+import java.nio.ShortBuffer
 
 /**
  * Functions
@@ -96,4 +99,29 @@ fun createProgram(vertexSource: String, fragmentSource: String): Int {
         program = 0
     }
     return program
+}
+
+fun createFloatBuffer(array: FloatArray): FloatBuffer {
+    //先初始化 buffer，数组的长度 * 4，因为一个 float 占4个字节
+    val byteBuffer = ByteBuffer.allocateDirect(array.size * 4)
+    //数组排列用 nativeOrder
+    byteBuffer.order(ByteOrder.nativeOrder())
+    val floatBuffer = byteBuffer.asFloatBuffer()
+    floatBuffer.put(array)
+    floatBuffer.position(0)
+    return floatBuffer
+}
+
+fun createShortBuffer(array: ShortArray): ShortBuffer {
+    //2 bytes per short
+    val byteBuffer = ByteBuffer.allocateDirect(array.size * 2)
+    byteBuffer.order(ByteOrder.nativeOrder())
+    val shortBuffer = byteBuffer.asShortBuffer()
+    shortBuffer.put(array)
+    shortBuffer.position(0)
+    return shortBuffer
+}
+
+fun toString(array: FloatArray) = buildString {
+    array.forEach { append("$it ") }
 }
