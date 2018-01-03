@@ -5,7 +5,7 @@ android {
     compileSdkVersion 26
 
     defaultConfig {
-        applicationId "me.juhezi.ding"
+        applicationId "me.juhezi.module.ding"
         minSdkVersion 21
         targetSdkVersion 26
         versionCode 1
