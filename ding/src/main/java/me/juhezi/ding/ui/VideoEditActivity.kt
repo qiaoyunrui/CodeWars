@@ -1,9 +1,10 @@
-package me.juhezi.ding
+package me.juhezi.ding.ui
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import kotlinx.android.synthetic.main.activity_video_edit.*
+import me.juhezi.ding.R
 import me.juhezi.ding.view.BottomContainer
 
 /**

@@ -24,7 +24,7 @@ android {
             keyPassword project.hasProperty("ALIAS_PASS") ? ALIAS_PASS : System.getenv("ALIAS_PASS")
         }
     }
-    compileSdkVersion rootProject.ext.androidCompileSdkVersion
+    compileSdkVersion 26
     buildToolsVersion rootProject.ext.androidBuildToolsVersion
     defaultConfig {
         applicationId mApplicationId
@@ -83,18 +83,13 @@ dependencies {
     implementation "com.android.support:recyclerview-v7:$rootProject.ext.supportLibVersion"
     implementation "com.android.support:cardview-v7:$rootProject.ext.supportLibVersion"
     implementation "com.android.support:design:$rootProject.ext.supportLibVersion"
-
     //test
     testImplementation "junit:junit:$rootProject.ext.junitVersion"
-
     //module
     implementation project(':base')
-
     if (!cameraSingle.toBoolean()) { // Application
         implementation project(':camera')
     }
-
     //Router
-//    annotationProcessor project(':router:router-compiler')
-
+    //    annotationProcessor project(':router:router-compiler')
 }

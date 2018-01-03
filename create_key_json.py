@@ -19,7 +19,7 @@ print(DESC_STRING % KEYSTORE_PASS)
 keystorePassword = input()
 print(DESC_STRING % ALIAS_NAME)
 aliasName = input()
-print(DESC_STRING % ALIAS_NAME)
+print(DESC_STRING % ALIAS_PASS)
 aliasPassword = input()
 keys[KEYSTORE_PASS] = keystorePassword
 keys[ALIAS_NAME] = aliasName

@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ding</string>
+    <string name="capture">拍照</string>
+    <string name="pick_from_photo_album">从相册选取</string>
 </resources>
