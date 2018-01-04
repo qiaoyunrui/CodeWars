@@ -19,9 +19,7 @@ class TurnActivity : AppCompatActivity() {
 
     fun initEvent() {
         btn_capture.setOnClickListener {
-            //调用系统拍摄界面
-            var intent = Intent(Intent.ACTION_VIEW)
-            startActivity(intent)
+
         }
         btn_pick_from_photo_album.setOnClickListener {
             //打开相机录像
