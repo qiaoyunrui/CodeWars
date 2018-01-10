@@ -43,14 +43,14 @@ dependencies {
     })
     testImplementation 'junit:junit:4.12'
     api "com.android.support:appcompat-v7:$rootProject.ext.supportLibVersion"
+    api "com.android.support:design:$rootProject.ext.supportLibVersion"
+    api "com.android.support:cardview-v7:$rootProject.ext.supportLibVersion"
     api "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlinVersion"
     // compile "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
-
     // Module
-//    api project(":router-api")
-//    api 'me.juhezi.module:router_api:0.1@aar'
+    //    api project(":router-api")
+    //    api 'me.juhezi.module:router_api:0.1@aar'
     api name: 'router-api', ext: 'aar'
-
     // ButterKnife
     api "com.jakewharton:butterknife:$rootProject.ext.butterKnifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.butterKnifeVersion"
