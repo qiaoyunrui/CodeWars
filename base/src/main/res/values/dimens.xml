@@ -2,7 +2,7 @@
 <resources>
     <dimen name="tool_bar_height">56dp</dimen>
 
-    <dimen name="default_margin">16dp</dimen>
+    <dimen name="default_margin">8dp</dimen>
 
     <dimen name="text_size_5">5sp</dimen>
     <dimen name="text_size_8">8sp</dimen>

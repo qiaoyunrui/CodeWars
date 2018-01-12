@@ -9,6 +9,9 @@ import android.support.v7.app.AppCompatActivity
 import com.airbnb.lottie.LottieComposition
 import kotlinx.android.synthetic.main.activity_turn.*
 import me.juhezi.ding.R
+import me.juhezi.module.base.applyClickEffect
+import me.juhezi.module.base.createAlphaEffect
+import me.juhezi.module.base.createScaleEffect
 import me.juhezi.module.base.extensions.i
 import java.io.File
 
@@ -33,7 +36,7 @@ class TurnActivity : AppCompatActivity() {
             val file = File("${Environment.getExternalStorageDirectory()}/123.mp4")
             i(file.path)
             val uri = Uri.fromFile(file)
-            intent.putExtra(MediaStore.EXTRA_OUTPUT,uri)
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
             startActivity(intent)
         }
         btn_pick_from_photo_album.setOnClickListener {
@@ -41,9 +44,11 @@ class TurnActivity : AppCompatActivity() {
         }
 //        lav_anim.setAnimation("anim.json")
         lav_anim.imageAssetsFolder = "images"
-        fab_add.setOnClickListener{
+        fab_add.setOnClickListener {
             lav_anim.playAnimation()
         }
+        applyClickEffect(iv_finger, createAlphaEffect(0.7f))
+        iv_finger.setOnClickListener {}
     }
 
 }
