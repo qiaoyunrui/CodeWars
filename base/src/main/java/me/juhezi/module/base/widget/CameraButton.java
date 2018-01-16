@@ -18,6 +18,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+import me.juhezi.module.base.BaseApplication;
+import me.juhezi.module.base.extensions.ContextExKt;
+
 /**
  * Created by Juhezi[juhezix@163.com] on 2017/10/25.
  */
@@ -38,19 +41,22 @@ public class CameraButton extends View {
     private static final int BITMAP_DRAWABLE = 0x02;    //Bitmap
     //add Gradient-Support if have more time
 
-    private static final long DEFAULT_ANIM_DURATION = 1000;
+    private static final long DEFAULT_ANIM_DURATION = 100;  //动画持续时间
 
     private long mAnimDuration = DEFAULT_ANIM_DURATION;
 
-    private static final long DEFAULT_CLICK_LIMIT_TIME = 500;
+    private static final long DEFAULT_CLICK_LIMIT_TIME = 1500;
 
-    private static final long DEFAULT_CLICK_MAX_TIME = 15000;   //最长时间为 15 秒
+    private static final long DEFAULT_CLICK_MAX_TIME = 15 * 1000;   //最长时间为 15 秒
 
     private static final float DEFAULT_ZOOM_LOAD_FACTOR = 0.75f;
+
+    private boolean mEnable = true;
 
     private long mClickLimitTime = DEFAULT_CLICK_LIMIT_TIME;//判断是否为长按的 Tag
     private long mClickMaxTime = DEFAULT_CLICK_MAX_TIME;    //点击最大时间
     private float mZoomLoadFactor = DEFAULT_ZOOM_LOAD_FACTOR;
+
 
     @CameraButton.State
     private int mCurrentState = INIT_STATE; //当前状态
@@ -63,17 +69,17 @@ public class CameraButton extends View {
     private @interface State {
     }
 
-    private static final float DEFAULT_INNER_CIRCLE_RADIUS = 80.0f;
-    private static final float DEFAULT_OUTER_CIRCLE_RADIUS = 90.0f;
+    private static final float DEFAULT_INNER_CIRCLE_RADIUS = ContextExKt.dp2px(BaseApplication.getContext(), 27.5f);    //55dp
+    private static final float DEFAULT_OUTER_CIRCLE_RADIUS = ContextExKt.dp2px(BaseApplication.getContext(), 40f);    //80dp
 
-    private static final float DEFAULT_INNER_CIRCLE_SCALE = 0.8f;
-    private static final float DEFAULT_OUTER_CIRCLE_SCALE = 1.2f;
+    private static final float DEFAULT_INNER_CIRCLE_SCALE = 0.87273f;
+    private static final float DEFAULT_OUTER_CIRCLE_SCALE = 1.5f;
 
-    private static final int DEFAULT_INNER_NORMAL_COLOR = Color.RED;
-    private static final int DEFAULT_OUTER_NORMAL_COLOR = Color.GREEN;
+    private static final int DEFAULT_INNER_NORMAL_COLOR = Color.WHITE;
+    private static final int DEFAULT_OUTER_NORMAL_COLOR = 0x3DFFFFFF;
 
-    private static final int DEFAULT_INNER_PRESSED_COLOR = Color.YELLOW;
-    private static final int DEFAULT_OUTER_PRESSED_COLOR = Color.BLUE;
+    private static final int DEFAULT_INNER_PRESSED_COLOR = 0xFFC7C7C7;
+    private static final int DEFAULT_OUTER_PRESSED_COLOR = 0x3DFFFFFF;
 
     private float mInnerCircleRadius = DEFAULT_INNER_CIRCLE_RADIUS;   //内圆半径(初始)
     private float mOuterCircleRadius = DEFAULT_OUTER_CIRCLE_RADIUS;   //外圆半径(初始)
@@ -98,6 +104,7 @@ public class CameraButton extends View {
     private ValueAnimator mUnexpendAnim;
 
     private float mCurrentPercent = 0f;
+    private long mLastDistance = 0;
 
     private boolean mCanClick = true;    //是否可以点击
 
@@ -111,6 +118,7 @@ public class CameraButton extends View {
     private OnSingleClickListener mOnSingleClickListener;
     private OnLongClickListener mOnLongClickListener;
     private OnZoomListener mOnZoomListener;
+    private OnPreClickListener mOnPreClickListener;
 
     public CameraButton(Context context) {
         this(context, null);
@@ -337,6 +345,10 @@ public class CameraButton extends View {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if (!mEnable) return false;
+                if (mOnPreClickListener != null) {
+                    mOnPreClickListener.onPreClick();
+                }
                 checkCanClick();
                 if (mCanClick) {
                     mStartTime = System.currentTimeMillis();
@@ -356,6 +368,7 @@ public class CameraButton extends View {
                 }
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (!mEnable) return false;
                 if (mCanClick) {
                     mCurrentTime = System.currentTimeMillis();
                     observeClickEvent();
@@ -363,8 +376,10 @@ public class CameraButton extends View {
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                mEndTime = System.currentTimeMillis();
-                if (mCanClick) {
+                if (!mEnable) return false;
+                if (mCanClick) {    //已经不能点击了，do nothing
+                    mEndTime = System.currentTimeMillis();
+                    mLastDistance = mEndTime - mStartTime;
                     dispatchClickEvent();
                     if (mCurrentState == STATE_EXPANDED) {
                         mUnexpendAnim.setFloatValues(1f, 0f);
@@ -427,6 +442,8 @@ public class CameraButton extends View {
         long duration = mCurrentTime - mStartTime;
         if (duration >= mClickMaxTime) {
             mCanClick = false;
+            mEndTime = mCurrentTime;
+            mLastDistance = mEndTime - mStartTime;
             endClick();
         }
     }
@@ -460,6 +477,10 @@ public class CameraButton extends View {
                 mOnLongClickListener.onEndLongClick();
             }
         }
+    }
+
+    public void setEnable(boolean enable) {
+        this.mEnable = enable;
     }
 
     //------------------------get & set--------------------------
@@ -556,13 +577,28 @@ public class CameraButton extends View {
         this.mOnZoomListener = onZoomListener;
     }
 
+    public void setOnPreClickListener(OnPreClickListener onPreClickListener) {
+        this.mOnPreClickListener = onPreClickListener;
+    }
+
     public void setClickMaxTime(long clickMaxTime) {
         this.mClickMaxTime = clickMaxTime;
     }
 
     public long getDistanceTime() {
+        mCurrentTime = System.currentTimeMillis();
         return mCurrentTime - mStartTime;
     }
+
+    /**
+     * 获取上一段操作的时间
+     *
+     * @return
+     */
+    public long getLastDistanceTime() {
+        return mLastDistance;
+    }
+
     //-------------------------------Inner Class--------------------------------
 
     private static class Point {
@@ -589,6 +625,7 @@ public class CameraButton extends View {
     }
 
     public interface OnLongClickListener {
+
         void onStartLongClick();
 
         void onEndLongClick();
@@ -598,6 +635,10 @@ public class CameraButton extends View {
 
     public interface OnZoomListener {
         void onZoom(float scale);
+    }
+
+    public interface OnPreClickListener {
+        void onPreClick();  //用于设置 mMaxClickTime;
     }
 
 }

@@ -14,6 +14,8 @@ open class BaseApplication : Application() {
         private lateinit var sInstance: BaseApplication
         @JvmStatic
         fun getInstance() = sInstance
+        @JvmStatic
+        fun getContext() = sInstance.applicationContext
     }
 
     override fun onCreate() {

@@ -33,7 +33,7 @@
             android:layout_height="96dp"
             android:layout_gravity="center"
             app:lottie_autoPlay="false"
-            app:lottie_fileName="anim.json"
+            app:lottie_fileName="focus_anim.json"
             app:lottie_loop="false" />
 
     </android.support.v7.widget.CardView>

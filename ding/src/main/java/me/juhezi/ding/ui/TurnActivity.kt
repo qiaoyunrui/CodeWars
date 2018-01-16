@@ -6,12 +6,10 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
-import com.airbnb.lottie.LottieComposition
 import kotlinx.android.synthetic.main.activity_turn.*
 import me.juhezi.ding.R
 import me.juhezi.module.base.applyClickEffect
 import me.juhezi.module.base.createAlphaEffect
-import me.juhezi.module.base.createScaleEffect
 import me.juhezi.module.base.extensions.i
 import java.io.File
 
@@ -48,7 +46,10 @@ class TurnActivity : AppCompatActivity() {
             lav_anim.playAnimation()
         }
         applyClickEffect(iv_finger, createAlphaEffect(0.7f))
-        iv_finger.setOnClickListener {}
+        iv_finger.setOnClickListener {
+            val intent = Intent(this, VideoCaptureActivity::class.java)
+            startActivity(intent)
+        }
     }
 
 }
