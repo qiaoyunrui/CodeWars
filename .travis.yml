@@ -9,6 +9,7 @@ android:
   - extra-android-m2repository
   - sys-img-armeabi-v7a-android-26
   - sys-img-armeabi-v7a-android-20
+  - cmake
   licenses:
       - 'android-sdk-license-.+'
       - 'google-gdk-license-.+'
@@ -34,6 +35,7 @@ before_install:
 - openssl aes-256-cbc -K $encrypted_54c28a617310_key -iv $encrypted_54c28a617310_iv
   -in codewars_juhezi.jks.enc -out codewars_juhezi.jks -d
 - gem install fir-cli
+- echo "y" | sdkmanager "cmake;3.6.4111459"
 before_deploy:
 - mv app/build/outputs/apk/app-codewars-release.apk app/build/outputs/apk/CodeWars.apk
 deploy:
