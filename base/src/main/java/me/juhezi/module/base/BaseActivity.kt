@@ -10,28 +10,20 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 
 /**
+ *
  * Created by Juhezi[juhezix@163.com] on 2017/8/3.
  */
 open class BaseActivity : AppCompatActivity() {
 
-    companion object {
-        const val STATUS_CONTENT = 0x00
-        const val STATUS_LOADING = 0x01
-        const val STATUS_EMPTY = 0x02
-        const val STATUS_ERROR = 0x03
-        const val STATUS_NO_NETWORK = 0x04
-    }
 
-    var mStatus = STATUS_EMPTY
+    //多种状态的 View，这几个 View 都要从具体的 layout 中加载
+    protected var mEmptyView: View? = null
+    protected var mErrorView: View? = null
+    protected var mLoadingView: View? = null
+    protected var mNoNetworkView: View? = null
+    protected var mContentView: View? = null
 
-    //多种状态的 View
-    private var mEmptyView: View? = null
-    private var mErrorView: View? = null
-    private var mLoadingView: View? = null
-    private var mNoNetworkView: View? = null
-    private var mContentView: View? = null
-
-    private val mLayoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+    protected val mLayoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
             ViewGroup.LayoutParams.MATCH_PARENT)
 
     @LayoutRes private var mEmptyViewResId = R.layout.view_empty_default
@@ -41,103 +33,126 @@ open class BaseActivity : AppCompatActivity() {
     @LayoutRes private var mRootViewResId = R.layout.activity_base
 
     private var mRootView: View? = null
-    private var mContainer: FrameLayout? = null
+    protected var mContainer: FrameLayout? = null
     protected var mToolbar: Toolbar? = null
 
-    private val refreshAction = onRefresh()
+    protected val mBaseViewController: BaseViewController = BaseViewController()
 
-    private var mInflater: LayoutInflater? = null
+    protected var mInflater: LayoutInflater? = null
+
+    var toolBarVisibility = true
+        set(value) {
+            field = value
+            mToolbar?.visibility = if (value) View.VISIBLE else View.GONE
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mInflater = LayoutInflater.from(this)
-        initBaseData()
+        initRootView()
         installViews()
     }
 
-    private fun initBaseData() {
+    /**
+     * 加载根布局
+     */
+    private fun initRootView() {
         super.setContentView(mRootViewResId)
         mRootView = findViewById(R.id.vg_base_activity_root)
         mContainer = findViewById(R.id.vg_base_activity_container)
         mToolbar = findViewById(R.id.tb_base_activity)
+        mToolbar?.visibility = if (toolBarVisibility) View.VISIBLE else View.GONE
+        //这里应该将基础 View 中添加到界面中
         if (supportActionBar == null) {
             setSupportActionBar(mToolbar)
         }
+        loadBaseViews()
+        installViews()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        mBaseViewController.init()
+    }
+
+    private fun loadBaseViews() {
+        onLoadLoadingView()
+
+        onLoadErrorView()
+
+        onLoadEmptyView()
+
+        onLoadNoNetworkView()
+
+        loadViews()
     }
 
     override fun setContentView(layoutResID: Int) {
         mContentView = mInflater?.inflate(layoutResID, null)
-        mContainer?.addView(mContentView, 0, mLayoutParams)
+        mContainer?.addView(mContentView, mLayoutParams)
+        mBaseViewController.load(BaseViewController.STATUS_CONTENT, mContentView)
     }
 
-    open protected fun installViews() {}
+    open fun onLoadLoadingView() {
+        mLoadingView = mInflater?.inflate(mLoadingViewResId, null)
+        mContainer?.addView(mLoadingView, mLayoutParams)
+        mBaseViewController.load(BaseViewController.STATUS_LOADING, mLoadingView)
+    }
+
+    open fun onLoadErrorView() {
+        mErrorView = mInflater?.inflate(mErrorViewResId, null)
+        mContainer?.addView(mErrorView, mLayoutParams)
+        mBaseViewController.load(BaseViewController.STATUS_ERROR, mErrorView)
+    }
+
+    open fun onLoadEmptyView() {
+        mEmptyView = mInflater?.inflate(mEmptyViewResId, null)
+        mContainer?.addView(mEmptyView, mLayoutParams)
+        mBaseViewController.load(BaseViewController.STATUS_EMPTY, mEmptyView)
+    }
+
+    open fun onLoadNoNetworkView() {
+        mNoNetworkView = mInflater?.inflate(mNoNetworkViewResId, null)
+        mContainer?.addView(mNoNetworkView, mLayoutParams)
+        mBaseViewController.load(BaseViewController.STATUS_NO_NETWORK, mNoNetworkView)
+    }
+
+    protected fun showContent() {
+        show(BaseViewController.STATUS_CONTENT)
+    }
+
+    protected fun showEmpty() {
+        show(BaseViewController.STATUS_EMPTY)
+    }
+
+    protected fun showError() {
+        show(BaseViewController.STATUS_ERROR)
+    }
+
+    protected fun showLoading() {
+        show(BaseViewController.STATUS_LOADING)
+    }
+
+    protected fun showNoNetwork() {
+        show(BaseViewController.STATUS_NO_NETWORK)
+    }
+
+    protected fun show(status: String) {
+        mBaseViewController.show(status, true)
+    }
+
+    @Deprecated("Will delete")
+    open protected fun installViews() {
+    }
+
+    open protected fun loadViews() {
+    }
+
+    private fun refresh() {
+        onRefresh()
+    }
 
     open protected fun onRefresh() {}
-
-    protected fun showContentView() {
-        mStatus = STATUS_CONTENT
-        showView(mStatus)
-    }
-
-    protected fun showLoading(layoutResID: Int = mLoadingViewResId, action: ((View?) -> Unit)? = null) {
-        mStatus = STATUS_LOADING
-        if (null == mLoadingView) {
-            mLoadingView = mInflater?.inflate(layoutResID, null)
-            mContainer?.addView(mLoadingView, 0, mLayoutParams)
-        }
-        action?.invoke(mLoadingView)
-        showView(mStatus)
-    }
-
-    protected fun showError(layoutResID: Int = mErrorViewResId, action: ((View?) -> Unit)? = null) {
-        mStatus = STATUS_ERROR
-        if (null == mErrorView) {
-            mErrorView = mInflater?.inflate(layoutResID, null)
-            mContainer?.addView(mErrorView, 0, mLayoutParams)
-        }
-        action?.invoke(mErrorView)
-        showView(mStatus)
-    }
-
-    protected fun showNoNetWork(layoutResID: Int = mNoNetworkViewResId, action: ((View?) -> Unit)? = null) {
-        mStatus = STATUS_NO_NETWORK
-        if (null == mNoNetworkView) {
-            mNoNetworkView = mInflater?.inflate(layoutResID, null)
-            mContainer?.addView(mNoNetworkView, 0, mLayoutParams)
-        }
-        action?.invoke(mNoNetworkView)
-        showView(mStatus)
-    }
-
-    protected fun showEmpty(layoutResID: Int = mEmptyViewResId, action: ((View?) -> Unit)? = null) {
-        mStatus = STATUS_EMPTY
-        if (null == mEmptyView) {
-            mEmptyView = mInflater?.inflate(layoutResID, null)
-            mContainer?.addView(mEmptyView, 0, mLayoutParams)
-        }
-        action?.invoke(mEmptyView)
-        showView(mStatus)
-    }
-
-    private fun showView(viewStatus: Int) {
-        when (viewStatus) {
-            STATUS_CONTENT -> mContentView?.visibility = View.VISIBLE
-            STATUS_EMPTY -> mEmptyView?.visibility = View.VISIBLE
-            STATUS_ERROR -> mErrorView?.visibility = View.VISIBLE
-            STATUS_NO_NETWORK -> mErrorView?.visibility = View.VISIBLE
-            STATUS_LOADING -> mLoadingView?.visibility = View.VISIBLE
-            else -> mEmptyView?.visibility = View.VISIBLE
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        mContentView = null
-        mEmptyView = null
-        mErrorView = null
-        mLoadingView = null
-        mNoNetworkView = null
-    }
 
 }
 

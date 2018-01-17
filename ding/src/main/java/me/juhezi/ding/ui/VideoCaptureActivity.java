@@ -57,6 +57,11 @@ public class VideoCaptureActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);   //全屏
+    }
+
+    @Override
+    protected void installViews() {
+        super.installViews();
         setContentView(R.layout.activity_capture);
         Toast.makeText(this, "🐷🐷 正在使用 CameraKit!! 🐷🐷", Toast.LENGTH_SHORT).show();
         initView();
@@ -80,6 +85,8 @@ public class VideoCaptureActivity extends BaseActivity {
     }
 
     private void initView() {
+        showContent();
+        setToolBarVisibility(false);    //隐藏 Toolbar
         //Load View
         mGLTVPreview = (TextureView) findViewById(R.id.gltv_video_capture_preview);
         mVgButtonContainer = (ViewGroup) findViewById(R.id.fl_video_capture_button_container);
