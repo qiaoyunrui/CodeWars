@@ -88,17 +88,17 @@ public class VideoCaptureActivity extends BaseActivity {
         showContent();
         setToolBarVisibility(false);    //隐藏 Toolbar
         //Load View
-        mGLTVPreview = (TextureView) findViewById(R.id.gltv_video_capture_preview);
-        mVgButtonContainer = (ViewGroup) findViewById(R.id.fl_video_capture_button_container);
-        mIvRemove = (ImageView) findViewById(R.id.iv_video_capture_remove);
-        mCbCapture = (CameraButton) findViewById(R.id.cb_video_capture);
-        mIvNext = (ImageView) findViewById(R.id.iv_video_capture_next);
-        mIvClose = (ImageView) findViewById(R.id.iv_video_capture_close);
-        mIvFlash = (ImageView) findViewById(R.id.iv_video_capture_flash);
-        mIvAction = (ImageView) findViewById(R.id.iv_video_capture_action);
-        mProgressBar = (MultiSegmentProgressBar) findViewById(R.id.mspb_video_capture_progress);
-        mTvgTouch = (TabViewGroup) findViewById(R.id.tvg_video_capture_touch_view);
-        mIvTouch = (ImageView) findViewById(R.id.iv_video_capture_touch_sign);
+        mGLTVPreview = findViewById(R.id.gltv_video_capture_preview);
+        mVgButtonContainer = findViewById(R.id.fl_video_capture_button_container);
+        mIvRemove = findViewById(R.id.iv_video_capture_remove);
+        mCbCapture = findViewById(R.id.cb_video_capture);
+        mIvNext = findViewById(R.id.iv_video_capture_next);
+        mIvClose = findViewById(R.id.iv_video_capture_close);
+        mIvFlash = findViewById(R.id.iv_video_capture_flash);
+        mIvAction = findViewById(R.id.iv_video_capture_action);
+        mProgressBar = findViewById(R.id.mspb_video_capture_progress);
+        mTvgTouch = findViewById(R.id.tvg_video_capture_touch_view);
+        mIvTouch = findViewById(R.id.iv_video_capture_touch_sign);
     }
 
     void initEvent() {
