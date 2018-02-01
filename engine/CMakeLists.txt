@@ -4,6 +4,8 @@
 
 cmake_minimum_required(VERSION 3.4.1)
 
+set(COMMON_SOURCE_DIR ${CMAKE_SOURCE_DIR}/src/main/cpp)
+
 # Specifies a library name, specifies whether the library is STATIC or
 # SHARED, and provides relative paths to the source code. You can
 # define multiple libraries by adding multiple add.library() commands,
@@ -17,4 +19,6 @@ add_library( # Specifies the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             src/main/cpp/native-lib.cpp )
+             ${COMMON_SOURCE_DIR}/native-lib.cpp
+             ${COMMON_SOURCE_DIR}/triangle.c
+             ${COMMON_SOURCE_DIR}/esUtil.h)

@@ -14,6 +14,8 @@ import me.juhezi.module.base.extensions.dp2px
 
 /**
  *
+ * Waitting
+ *
  * [Refactor]
  *
  * 重构后的拍照按钮，和 微信 & 微博故事 的交互一样
