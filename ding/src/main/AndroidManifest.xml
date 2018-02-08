@@ -4,6 +4,8 @@
     package="me.juhezi.ding">
 
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:name="me.juhezi.module.base.BaseApplication"
@@ -14,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="android:theme">
-        <activity android:name=".ui.TestActivity">
+        <activity android:name=".ui.VideoEditActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

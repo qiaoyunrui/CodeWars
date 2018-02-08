@@ -1,42 +1,44 @@
 package me.juhezi.ding.ui
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import android.view.View
 import kotlinx.android.synthetic.main.activity_video_edit.*
 import me.juhezi.ding.R
-import me.juhezi.ding.view.BottomContainer
+import me.juhezi.module.base.BaseActivity
+import me.juhezi.module.base.engine.edit.VideoEditKit
+import me.juhezi.module.base.extensions.isValidPath
+import me.juhezi.module.base.logi
 
 /**
  * 视频编辑页
  */
-class VideoEditActivity : AppCompatActivity() {
+class VideoEditActivity : BaseActivity() {
 
-    private lateinit var bottomContainer: BottomContainer
+    private lateinit var videoEditKit: VideoEditKit
 
-    private var bottomIcons = listOf(
-            R.drawable.bottom_music_unselect,
-            R.drawable.bottom_music_select,
-            R.drawable.bottom_filter_unselect,
-            R.drawable.bottom_filter_select,
-            R.drawable.bottom_title_unselect,
-            R.drawable.bottom_title_select)
+    private var videoPath: String = "storage/emulated/0/video.mp4"  //视频地址
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_edit)
-        initView()
+        showContent()
+        videoEditKit = VideoEditKit(this)
+        logi("文件是否存在？ ${videoPath.isValidPath()}")
+        videoEditKit.init(videoPath, tv_video_edit)
     }
 
-    private fun initView() {
-        bottomContainer = BottomContainer(vg_bottom_container, object : BottomContainer.Adapter() {
-            override fun onCreateView(view: View?, position: Int) =
-                    BottomContainer.SelectHolder(view)
-
-            override fun onBindHolder(holder: BottomContainer.SelectHolder?, position: Int) {
-                holder?.setNormalIcon(bottomIcons[position * 2])
-                holder?.setSelectIcon(bottomIcons[position * 2 + 1])
-            }
-        })
+    override fun onResume() {
+        super.onResume()
+        videoEditKit.play()
     }
+
+    override fun onPause() {
+        super.onPause()
+        videoEditKit.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        videoEditKit.destroy()
+    }
+
 }

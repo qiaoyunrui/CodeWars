@@ -16,6 +16,8 @@ import java.nio.ShortBuffer
  * Created by Juhezi[juhezix@163.com] on 2017/12/19.
  */
 
+val TAG = "Functions TAG"
+
 /**
  * 获取信道的样本
  * 不明所以

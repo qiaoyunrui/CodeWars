@@ -1,6 +1,7 @@
 package me.juhezi.ding.ui
 
 import android.os.Bundle
+import android.view.MotionEvent
 import kotlinx.android.synthetic.main.activity_test.*
 import me.juhezi.ding.R
 import me.juhezi.module.base.BaseActivity
@@ -18,8 +19,7 @@ class TestActivity : BaseActivity() {
         setContentView(R.layout.activity_test)
         showContent()
         vg_test_root.setOnEventListener(object : TouchViewGroup.OnEventListener {
-            override fun onClick() {
-                //搞定
+            override fun onClick(event: MotionEvent?) {
                 logi("点击")
             }
 

@@ -6,17 +6,9 @@
     android:background="@android:color/black"
     tools:context="me.juhezi.ding.ui.VideoEditActivity">
 
-
-    <!--Bottom Bar-->
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
-
-        <include
-            android:id="@+id/vg_bottom_container"
-            layout="@layout/view_bottom_container" />
-
-    </RelativeLayout>
+    <TextureView
+        android:id="@+id/tv_video_edit"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </RelativeLayout>

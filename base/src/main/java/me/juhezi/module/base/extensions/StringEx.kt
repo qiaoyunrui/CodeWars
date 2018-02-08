@@ -2,6 +2,11 @@ package me.juhezi.module.base.extensions
 
 import android.graphics.Paint
 import android.graphics.Rect
+import android.text.TextUtils
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 
@@ -39,4 +44,34 @@ fun String.MD5Code(): String {
     } catch (e: NoSuchAlgorithmException) {
         return hashCode().toString()
     }
+}
+
+/**
+ * 将文件移动到目标路径
+ */
+fun String.moveFile(targetPath: String) {
+    val fis: FileInputStream = FileInputStream(this)
+    val fos: FileOutputStream = FileOutputStream(targetPath)
+    val buff = ByteArray(1024)
+    var read: Int = fis.read(buff)
+    while (read != -1) {
+        fos.write(buff, 0, read)
+        read = fis.read(buff)
+    }
+    fis.close()
+    fis.close()
+}
+
+/**
+ * 检测是否为有效路径
+ */
+fun String.isValidPath(): Boolean {
+    if (TextUtils.isEmpty(this)) {
+        return false
+    } else {
+        val file = File(this)
+        if (!file.exists() || !file.isFile)
+            return false
+    }
+    return true
 }
