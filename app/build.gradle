@@ -1,7 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
-def mApplicationId = "me.juhezi.codewars"
-def app_name_release = "CodeWars"
+apply plugin: 'kotlin-android-extensions'
+
+def mApplicationId = "me.juhezi.dai"
+def app_name_release = "Dai"
 def dev_suffix = "dev"
 
 static def currentSecond() {
@@ -24,7 +26,7 @@ android {
             keyPassword project.hasProperty("ALIAS_PASS") ? ALIAS_PASS : System.getenv("ALIAS_PASS")
         }
     }
-    compileSdkVersion 26
+    compileSdkVersion rootProject.ext.androidCompileSdkVersion
     buildToolsVersion rootProject.ext.androidBuildToolsVersion
     defaultConfig {
         applicationId mApplicationId

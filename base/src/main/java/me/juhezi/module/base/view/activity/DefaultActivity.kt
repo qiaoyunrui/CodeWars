@@ -1,5 +1,6 @@
 package me.juhezi.module.base.view.activity
 
+import android.os.Bundle
 import me.juhezi.module.base.BaseActivity
 import me.juhezi.module.base.R
 import me.juhezi.module.base.extensions.i
@@ -10,8 +11,10 @@ import me.juhezi.module.base.extensions.i
  */
 class DefaultActivity : BaseActivity() {
 
-    override fun installViews() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_default)
+        showContent()
     }
 
 }
