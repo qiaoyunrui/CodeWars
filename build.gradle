@@ -31,7 +31,7 @@ ext {
 
 
 buildscript {
-    ext.kotlinVersion = '1.2.21'
+    ext.kotlinVersion = '1.2.30'
 
     repositories {
         jcenter()
@@ -42,7 +42,6 @@ buildscript {
         classpath 'com.android.tools.build:gradle:3.0.1'    //3.0.1 暂时无法下载
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 //        classpath "io.realm:realm-gradle-plugin:${project.ext.realmVersion}"
-        classpath "io.realm:realm-gradle-plugin:4.2.0"
     }
 }
 

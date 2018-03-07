@@ -9,7 +9,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import me.juhezi.module.base.extensions.i
 import me.juhezi.module.engine.R
 import me.juhezi.module.engine.core.camera.CameraKit
-import me.juhezi.module.engine.jni.Knife
 
 class MainActivity : AppCompatActivity(), SurfaceTexture.OnFrameAvailableListener {
     private val mTextureBuilder = TextureBuilder()
@@ -28,7 +27,6 @@ class MainActivity : AppCompatActivity(), SurfaceTexture.OnFrameAvailableListene
         mSurfaceTexture.setOnFrameAvailableListener(this)
         cameraKit.surfaceTexture = mSurfaceTexture
         cameraKit.startPreview()
-        btn_do.text = Knife().stringFromJNI()
         btn_do.setOnClickListener {
             sv_show.requestRender()
         }
