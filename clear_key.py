@@ -25,7 +25,8 @@ if not os.path.exists(fileName):
 with open(fileName, "r") as f:
     for line in f.readlines():
         if not has(line, keys):
-            content.append(line)
+            if line.strip() != "":
+                content.append(line)
 
 with open(fileName, "w") as f:
     for line in content:
