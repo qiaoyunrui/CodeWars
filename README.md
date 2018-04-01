@@ -44,43 +44,11 @@ Travis CI|![icon](https://travis-ci.org/qiaoyunrui/Dai.svg?branch=master)
 
 - [x] MultiSegmentProgressBar [With Test]
 
-#### Other
-
-- [x] BlurUtils [with Test]
-
-- [x] NetworkManager [with Test]
-
-- [x] getStatusbarHeight [with Test]
-
-- [x] runInUIThread && run [with Test]
-
-- [x] HandlerBuilder [with Test]
-
-- [x] Network 
-
 ## Modules
 
 * base
 
 * app
 
-* router-annotation
-
-* router-api
-
-* router-compiler
-
-* test
-
-## Functions
-
-* GitHub
-
-* Travis
-
-* Docker
-
-* Bash
-
-* Codewars
+* ding
 
